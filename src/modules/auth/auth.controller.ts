@@ -6,9 +6,9 @@ import { LoginDto } from './dto/login.dto';
 import { CheckOtpDto } from './dto/check-otp.dto';
 
 @ApiTags('Auth')
-@Controller('auth')
+@Controller({ version: "1", path: "auth" })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('/login')
   async login(@Body() payload: LoginDto) {

@@ -1,14 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import ExceptionHandlerFilter from 'exceptionFilter/all-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api/v1');
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalFilters(new ExceptionHandlerFilter())
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('MOVIE')
@@ -19,7 +24,6 @@ async function bootstrap() {
   const documentFactory = () =>
     SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, documentFactory);
-
 
   const appConfig = app.get(ConfigService)
 
