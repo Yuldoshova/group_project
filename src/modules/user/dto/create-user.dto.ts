@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { UserRoles } from 'src/utils/user-role.enum';
+import { UserRoles } from 'utils/user-role.enum';
 
 export class CreateUserDto {
   @IsOptional()

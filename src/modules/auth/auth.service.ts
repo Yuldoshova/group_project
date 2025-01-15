@@ -14,11 +14,11 @@ import {
 } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
-import { RedisService } from 'src/client/redis.service';
 import { LoginDto } from './dto/login.dto';
 import { CheckOtpDto } from './dto/check-otp.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { RefreshDto } from './dto/refresh.dto';
+import { RedisService } from 'client/redis.service';
 
 @Injectable()
 export class AuthService {
