@@ -80,7 +80,7 @@ import { VariationModule } from './modules/variation/variation.module';
     }),
     // AuthModule,
     UserModule,
-    ReviewModule
+    ReviewModule,
     ProductModule,
     // RedisCustomModule,
     VariationModule,
