@@ -17,6 +17,16 @@ import { APP_GUARD } from '@nestjs/core';
 import { ReviewModule } from 'modules/review/review.module'
 import { ProductModule } from './modules/product/product.module'
 import { VariationModule } from './modules/variation/variation.module';
+import { Category } from 'modules/categories/entities/category.entities';
+import { CategoryModule } from 'modules/categories/category.module';
+import { Brand } from 'modules/brand/entities/brand.entity';
+import { Product } from 'modules/product/entities/product.entity';
+import { Review } from 'modules/review/model/review.model';
+import { Color } from 'modules/product/entities/color.entity';
+import { ProductItem } from 'modules/product/entities/productItem.entity';
+import { Variation } from 'modules/variation/entities/variation.entity';
+import { VariationOption } from 'modules/variation/entities/variation-option.entity';
+import { BrandModule } from 'modules/brand/brand.module';
 
 @Module({
   imports: [
@@ -27,7 +37,7 @@ import { VariationModule } from './modules/variation/variation.module';
     ConfigModule.forRoot({
       load: [appConfig, dbConfig, jwtConfig, emailConfig],
       isGlobal: true,
-      envFilePath:'.env'
+      envFilePath: '.env'
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -38,9 +48,10 @@ import { VariationModule } from './modules/variation/variation.module';
         username: configService.get<string>('dbConfig.user'),
         password: configService.get<string>('dbConfig.password'),
         database: configService.get<string>('dbConfig.dbName'),
-        entites: [User],
-        autoLoadEntities:true,
+        entities: [User, Brand, Variation, Category, Product, Color, ProductItem, Review, VariationOption],
+        autoLoadEntities: true,
         synchronize: true,
+        // logging: true
       }),
       inject: [ConfigService]
     }),
@@ -81,9 +92,11 @@ import { VariationModule } from './modules/variation/variation.module';
     // AuthModule,
     UserModule,
     ReviewModule,
+    BrandModule,
     ProductModule,
     // RedisCustomModule,
     VariationModule,
+    CategoryModule,
   ],
   providers: [
     // {
@@ -92,4 +105,4 @@ import { VariationModule } from './modules/variation/variation.module';
     // }
   ],
 })
-export class AppModule {}
+export class AppModule { }

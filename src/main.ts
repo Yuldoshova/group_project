@@ -17,7 +17,7 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('ASHYO SHOP')
-    .setDescription('The movie app apis')
+    .setDescription('The ashyo backend apis')
     .setVersion('1.0')
     .addTag('apis')
     .build();

@@ -25,11 +25,8 @@ export class CategoryService {
     }
 
     const newCategory = this.categoryRepository.create({
-      name: createCategoryDto.name,
-      brend_id: createCategoryDto.brend_id,
-      parent_id: createCategoryDto.parent_id,
-      image: createCategoryDto.image,
-      icon: createCategoryDto.icon,
+
+      
     });
 
     await this.categoryRepository.save(newCategory);

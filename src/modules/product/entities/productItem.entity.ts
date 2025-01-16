@@ -1,7 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "./product.entity";
+import { Color } from "./color.entity";
 
 @Entity({ name: "product_items" })
-export class Product {
+export class ProductItem {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -14,8 +16,10 @@ export class Product {
     @Column({ name: "amount", type: "integer", nullable: true })
     amount: number
 
-    @Column({ name: "product_id", type: "integer", nullable: true })
-    product_id: number
+    @ManyToOne(() => Product, (product) => product.productItems)
+    product: Product
 
+    @OneToOne(() => Color, (color) => color.productItem)
+    color: Color
 
 }
