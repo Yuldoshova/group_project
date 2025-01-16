@@ -14,6 +14,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
+import { BrandModule } from 'modules/brand/brand.module';
+import { PromotionModule } from 'modules/promotion/promotion.module';
 
 @Module({
   imports: [
@@ -41,20 +43,20 @@ import { APP_GUARD } from '@nestjs/core';
       }),
       inject: [ConfigService]
     }),
-    RedisModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'single',
-        options: {
-          host: configService.get('REDIS_HOST'),
-          port: configService.get('REDIS_PORT'),
-          password: configService.get('REDIS_PASSWORD'),
-        },
-      }),
-    }),
+    // RedisModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (configService: ConfigService) => ({
+    //     type: 'single',
+    //     options: {
+    //       host: configService.get('REDIS_HOST'),
+    //       port: configService.get('REDIS_PORT'),
+    //       password: configService.get('REDIS_PASSWORD'),
+    //     },
+    //   }),
+    // }),
     JwtModule.register({
-      secret: 'my secret',
+      secret: 'my secret', 
       global: true,
       signOptions: {
         expiresIn: 60 * 15,
@@ -75,9 +77,11 @@ import { APP_GUARD } from '@nestjs/core';
       }),
       inject: [ConfigService],
     }),
-    AuthModule,
+    // AuthModule,
     UserModule,
-    RedisCustomModule,
+    // RedisCustomModule,
+    BrandModule,
+    PromotionModule
   ],
   providers: [
     {
@@ -87,3 +91,5 @@ import { APP_GUARD } from '@nestjs/core';
   ],
 })
 export class AppModule {}
+
+
