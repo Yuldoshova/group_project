@@ -14,6 +14,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
+import { VariationModule } from './modules/variation/variation.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { APP_GUARD } from '@nestjs/core';
     AuthModule,
     UserModule,
     RedisCustomModule,
+    VariationModule,
   ],
   providers: [
     {
