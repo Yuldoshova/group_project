@@ -1,7 +1,9 @@
+import { Review } from 'modules/review/model/review.model';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -18,7 +20,7 @@ export class User {
   @Column({ name: 'last_name', type: 'varchar', nullable: true })
   lastName: string;
 
-  @Column({ name: 'email', type: 'varchar', nullable: false })
+  @Column({ name: 'email', type: 'varchar' })
   email: string;
 
   @Column({
@@ -28,6 +30,9 @@ export class User {
     default: UserRoles.USER,
   })
   role: UserRoles;
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Array<Review>
 
   @CreateDateColumn({
     name: 'created_at',

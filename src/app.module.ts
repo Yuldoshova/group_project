@@ -10,12 +10,25 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { AuthModule } from './modules/auth/auth.module';
+// import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { RedisCustomModule } from './client/redis.module';
+// import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
 import { BrandModule } from 'modules/brand/brand.module';
 import { PromotionModule } from 'modules/promotion/promotion.module';
+import { ReviewModule } from 'modules/review/review.module'
+import { ProductModule } from './modules/product/product.module'
+import { VariationModule } from './modules/variation/variation.module';
+import { Category } from 'modules/categories/entities/category.entities';
+import { CategoryModule } from 'modules/categories/category.module';
+import { Brand } from 'modules/brand/entities/brand.entity';
+import { Product } from 'modules/product/entities/product.entity';
+import { Review } from 'modules/review/model/review.model';
+import { Color } from 'modules/product/entities/color.entity';
+import { ProductItem } from 'modules/product/entities/productItem.entity';
+import { Variation } from 'modules/variation/entities/variation.entity';
+import { VariationOption } from 'modules/variation/entities/variation-option.entity';
+import { BrandModule } from 'modules/brand/brand.module';
 
 @Module({
   imports: [
@@ -26,7 +39,7 @@ import { PromotionModule } from 'modules/promotion/promotion.module';
     ConfigModule.forRoot({
       load: [appConfig, dbConfig, jwtConfig, emailConfig],
       isGlobal: true,
-      envFilePath:'.env'
+      envFilePath: '.env'
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -37,9 +50,10 @@ import { PromotionModule } from 'modules/promotion/promotion.module';
         username: configService.get<string>('dbConfig.user'),
         password: configService.get<string>('dbConfig.password'),
         database: configService.get<string>('dbConfig.dbName'),
-        entites: [User],
-        autoLoadEntities:true,
+        entities: [User, Brand, Variation, Category, Product, Color, ProductItem, Review, VariationOption],
+        autoLoadEntities: true,
         synchronize: true,
+        // logging: true
       }),
       inject: [ConfigService]
     }),
@@ -79,17 +93,22 @@ import { PromotionModule } from 'modules/promotion/promotion.module';
     }),
     // AuthModule,
     UserModule,
-    // RedisCustomModule,
     BrandModule,
     PromotionModule
+    ReviewModule,
+    BrandModule,
+    ProductModule,
+    // RedisCustomModule,
+    VariationModule,
+    CategoryModule,
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard
-    }
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard
+    // }
   ],
 })
-export class AppModule {}
 
+export class AppModule { }
 
