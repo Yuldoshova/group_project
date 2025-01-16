@@ -14,7 +14,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { UserModule } from './modules/user/user.module';
 // import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
-import { ReviewModule } from 'modules/review/review.module';
+import { ReviewModule } from 'modules/review/review.module'
+import { ProductModule } from './modules/product/product.module'
+import { VariationModule } from './modules/variation/variation.module';
 
 @Module({
   imports: [
@@ -54,13 +56,13 @@ import { ReviewModule } from 'modules/review/review.module';
     //     },
     //   })
     // }),
-    // JwtModule.register({
-    //   secret: 'my secret',
-    //   global: true,
-    //   signOptions: {
-    //     expiresIn: 60 * 15,
-    //   },
-    // }),
+    JwtModule.register({
+      secret: 'my secret',
+      global: true,
+      signOptions: {
+        expiresIn: 60 * 15,
+      },
+    }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -78,8 +80,10 @@ import { ReviewModule } from 'modules/review/review.module';
     }),
     // AuthModule,
     UserModule,
-    // RedisCustomModule,
     ReviewModule
+    ProductModule,
+    // RedisCustomModule,
+    VariationModule,
   ],
   providers: [
     // {
