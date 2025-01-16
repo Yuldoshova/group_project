@@ -17,33 +17,23 @@ export class UserService {
   ) {}
 
   async create(create: CreateUserDto) {
-    const conflictUser = await this.userRepository.findOneBy({
-      email: create.email,
-    });
-    if (conflictUser) {
-      throw new ConflictException('Email already exists❗');
-    }
+    // const conflictUser = await this.userRepository.findOneBy({
+    //   email: create.email,
+    // });
+    // if (conflictUser) {
+    //   throw new ConflictException('Email already exists❗');
+    // }
 
-    const newUser = this.userRepository.create({
-      email: create.email,
-      firstName: create.firstName,
-      lastName: create.lastName,
-    });
+    const newUser = this.userRepository.create(create);
 
-    await this.userRepository.save(newUser);
+    return await this.userRepository.save(newUser);
 
-    return {
-      message: 'Success✅',
-      data: newUser,
-    };
+   
   }
 
   async findAll() {
-    const users = await this.userRepository.find();
-    return {
-      message: 'Success✅',
-      data: users,
-    };
+    return await this.userRepository.find();
+    
   }
 
   async findOne(id: number) {
@@ -51,19 +41,13 @@ export class UserService {
     if (!findUser) {
       throw new NotFoundException('User not found❗');
     }
-    return {
-      message: 'Success✅',
-      data: findUser,
-    };
+    return findUser
   }
 
   async findByEmail(email: string) {
-    const findUser = await this.userRepository.findOneBy({ email });
+    return await this.userRepository.findOneBy({ email });
 
-    return {
-      message: 'Success✅',
-      data: findUser,
-    };
+    
   }
 
   async update(id: number, update: UpdateUserDto) {

@@ -10,10 +10,11 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { AuthModule } from './modules/auth/auth.module';
+// import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { RedisCustomModule } from './client/redis.module';
+// import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
+import { ReviewModule } from 'modules/review/review.module';
 
 @Module({
   imports: [
@@ -41,25 +42,25 @@ import { APP_GUARD } from '@nestjs/core';
       }),
       inject: [ConfigService]
     }),
-    RedisModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'single',
-        options: {
-          host: configService.get('REDIS_HOST'),
-          port: configService.get('REDIS_PORT'),
-          password: configService.get('REDIS_PASSWORD'),
-        },
-      }),
-    }),
-    JwtModule.register({
-      secret: 'my secret',
-      global: true,
-      signOptions: {
-        expiresIn: 60 * 15,
-      },
-    }),
+    // RedisModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (configService: ConfigService) => ({
+    //     type: 'single',
+    //     options: {
+    //       host: configService.get('REDIS_HOST'),
+    //       port: configService.get('REDIS_PORT'),
+    //       password: configService.get('REDIS_PASSWORD'),
+    //     },
+    //   })
+    // }),
+    // JwtModule.register({
+    //   secret: 'my secret',
+    //   global: true,
+    //   signOptions: {
+    //     expiresIn: 60 * 15,
+    //   },
+    // }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -75,15 +76,16 @@ import { APP_GUARD } from '@nestjs/core';
       }),
       inject: [ConfigService],
     }),
-    AuthModule,
+    // AuthModule,
     UserModule,
-    RedisCustomModule,
+    // RedisCustomModule,
+    ReviewModule
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard
-    }
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard
+    // }
   ],
 })
 export class AppModule {}
