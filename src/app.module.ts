@@ -28,7 +28,6 @@ import { Color } from 'modules/product/entities/color.entity';
 import { ProductItem } from 'modules/product/entities/productItem.entity';
 import { Variation } from 'modules/variation/entities/variation.entity';
 import { VariationOption } from 'modules/variation/entities/variation-option.entity';
-import { BrandModule } from 'modules/brand/brand.module';
 
 @Module({
   imports: [
@@ -70,7 +69,7 @@ import { BrandModule } from 'modules/brand/brand.module';
     //   }),
     // }),
     JwtModule.register({
-      secret: 'my secret', 
+      secret: 'my secret',
       global: true,
       signOptions: {
         expiresIn: 60 * 15,
@@ -92,13 +91,13 @@ import { BrandModule } from 'modules/brand/brand.module';
       inject: [ConfigService],
     }),
     // AuthModule,
+    // RedisCustomModule,
     UserModule,
     BrandModule,
-    PromotionModule
+    PromotionModule,
     ReviewModule,
     BrandModule,
     ProductModule,
-    // RedisCustomModule,
     VariationModule,
     CategoryModule,
   ],
