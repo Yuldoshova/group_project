@@ -15,4 +15,5 @@ export class Brand {
 
   @OneToMany(() => Category, (category) =>category.brand)
   categories: Array<Category>
+
 }

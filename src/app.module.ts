@@ -14,6 +14,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { UserModule } from './modules/user/user.module';
 // import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
+import { BrandModule } from 'modules/brand/brand.module';
+import { PromotionModule } from 'modules/promotion/promotion.module';
 import { ReviewModule } from 'modules/review/review.module'
 import { ProductModule } from './modules/product/product.module'
 import { VariationModule } from './modules/variation/variation.module';
@@ -65,10 +67,10 @@ import { BrandModule } from 'modules/brand/brand.module';
     //       port: configService.get('REDIS_PORT'),
     //       password: configService.get('REDIS_PASSWORD'),
     //     },
-    //   })
+    //   }),
     // }),
     JwtModule.register({
-      secret: 'my secret',
+      secret: 'my secret', 
       global: true,
       signOptions: {
         expiresIn: 60 * 15,
@@ -91,6 +93,8 @@ import { BrandModule } from 'modules/brand/brand.module';
     }),
     // AuthModule,
     UserModule,
+    BrandModule,
+    PromotionModule
     ReviewModule,
     BrandModule,
     ProductModule,
@@ -105,4 +109,6 @@ import { BrandModule } from 'modules/brand/brand.module';
     // }
   ],
 })
+
 export class AppModule { }
+
