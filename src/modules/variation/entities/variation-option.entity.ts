@@ -1,5 +1,7 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Variation } from "./variation.entity"
 
+@Entity({ name: "variation_options" })
 export class VariationOption {
     @PrimaryGeneratedColumn()
     id: number
@@ -7,6 +9,6 @@ export class VariationOption {
     @Column({ name: "value", type: "varchar", nullable: false, unique: true })
     value: string
 
-    @Column({ name: "variation_id", type: "integer", nullable: false })
-    variation_id: number
+    @ManyToOne(() => Variation, (variation) => variation.options)
+    variation: Variation
 }
