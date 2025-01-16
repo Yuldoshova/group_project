@@ -16,7 +16,7 @@ async function bootstrap() {
   app.useGlobalFilters(new ExceptionHandlerFilter())
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('MOVIE')
+    .setTitle('ASHYO SHOP')
     .setDescription('The movie app apis')
     .setVersion('1.0')
     .addTag('apis')
