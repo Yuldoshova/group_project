@@ -15,8 +15,9 @@ import { UserModule } from './modules/user/user.module';
 // import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ReviewModule } from 'modules/review/review.module'
-import { ProductModule } from './modules/product/product.module'
 import { VariationModule } from './modules/variation/variation.module';
+import { ProductModule } from 'modules/product/product.module';
+import { AddressModule } from 'modules/address/address.module';
 
 @Module({
   imports: [
@@ -82,6 +83,7 @@ import { VariationModule } from './modules/variation/variation.module';
     UserModule,
     ReviewModule,
     ProductModule,
+    AddressModule,
     // RedisCustomModule,
     VariationModule,
   ],
