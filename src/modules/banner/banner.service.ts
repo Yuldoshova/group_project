@@ -30,7 +30,7 @@ export class BannerService {
   }
 
   async findAll(): Promise<Banner[]> {
-    return await this.bannerRepository.find({ relations: ['type'] }); // Barcha bannerlarni 'type' bilan birga olish
+    return await this.bannerRepository.find({ relations: ['type'] });
   }
 
   async findOne(id: number): Promise<Banner> {

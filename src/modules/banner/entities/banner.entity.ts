@@ -28,7 +28,7 @@ export class Banner {
   @Column()
   @ApiProperty({
     description: 'Banner turi (product yoki category)',
-    example: 1, // Misol uchun, 1 - product, 2 - category
+    example: 1,
   })
   type_id: number;
 
