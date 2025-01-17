@@ -7,17 +7,25 @@ import { CreateCategoryDto } from './dto/create-category.dto.ts';
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common';
+import { UploadService } from 'modules/uploads/upload.service';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-  ) {}
+    private uploadService: UploadService
+  ) { }
 
-  async createCategory(createCategoryDto: CreateCategoryDto) {
+  async createCategory(create: CreateCategoryDto, image: Express.Multer.File) {
+    const uploadImage = await this.uploadService.uploadFile({
+      file: image,
+      destination: "uploads/categories/images"
+    })
+
+
     const existingCategory = await this.categoryRepository.findOne({
-      where: { name: createCategoryDto.name },
+      where: { name: create.name },
     });
 
     if (existingCategory) {
@@ -25,8 +33,8 @@ export class CategoryService {
     }
 
     const newCategory = this.categoryRepository.create({
-
-      
+      name: create.name,
+      image: uploadImage.imageUrl
     });
 
     await this.categoryRepository.save(newCategory);
