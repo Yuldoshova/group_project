@@ -6,7 +6,7 @@ export class CreateProductDto {
 
     image: string
 
-    category_id: number
+    categoryId: number
 
-    brand_id: number
+    brandId: number
 }

@@ -1,4 +1,4 @@
-import {  Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,11 +15,17 @@ export class ProductService {
     private colorRepository: Repository<Color>
   ) { }
 
-  async create(create: CreateProductDto) {
+  async createProduct(create: CreateProductDto) {
 
     const newProduct = this.productRepository.create({
-
+      // name: create.name,
+      // description: create.description,
+      // image: create.image,
+      // brand:create.brandId,
+      // category:create.categoryId
     });
+
+  
 
     await this.productRepository.save(newProduct);
 
