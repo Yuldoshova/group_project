@@ -17,33 +17,33 @@ export class CreateCategoryDto {
     required: true,
     example: 1,
   })
-  @IsNumber()
-  @IsNotEmpty()
-  brend_id: number;
+  // @IsNumber()
+  // @IsNotEmpty()
+  brend_id?: number;
 
   @ApiProperty({
     type: 'number',
     required: true,
     example: 2,
   })
-  @IsNumber()
-  @IsNotEmpty()
-  parent_id: number;
+  // @IsNumber()
+  // @IsNotEmpty()
+  parent_id?: number;
 
   @ApiProperty({
     type: 'string',
     required: true,
   })
-  @IsString()
-  @IsNotEmpty()
-  image: string;
+  // @IsString()
+  // @IsNotEmpty()
+  image?: string;
 
   @ApiProperty({
     type: 'string',
     required: true,
     example: '📱',
   })
-  @IsString()
-  @IsNotEmpty()
-  icon: string;
+  // @IsString()
+  // @IsNotEmpty()
+  icon?: string;
 }

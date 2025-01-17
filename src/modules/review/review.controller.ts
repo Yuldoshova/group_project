@@ -3,12 +3,9 @@ import { CreateReviewDto } from "./dto/create-review.dto";
 import { UpdateReviewDto } from "./dto/update-review.dto";
 import { Review } from "./model/review.model";
 import { ReviewService } from "./review.service";
-
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 
-
-@ApiTags('review')
-
+@ApiTags('Review')
 @Controller('review')
 export class ReviewController {
     constructor(private readonly service: ReviewService) { }
@@ -32,8 +29,6 @@ export class ReviewController {
     @ApiResponse({ status: 404, description: 'Review not found.' })
     getOne(@Param('id') id: number): Promise<Review> {
         return this.service.getReviewById(id)
-
-
     }
 
     @Put('update/:id')

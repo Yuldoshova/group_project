@@ -14,10 +14,21 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { UserModule } from './modules/user/user.module';
 // import { RedisCustomModule } from './client/redis.module';
 import { APP_GUARD } from '@nestjs/core';
+import { BrandModule } from 'modules/brand/brand.module';
+import { PromotionModule } from 'modules/promotion/promotion.module';
 import { ReviewModule } from 'modules/review/review.module'
 import { VariationModule } from './modules/variation/variation.module';
 import { ProductModule } from 'modules/product/product.module';
 import { AddressModule } from 'modules/address/address.module';
+import { Category } from 'modules/categories/entities/category.entities';
+import { CategoryModule } from 'modules/categories/category.module';
+import { Brand } from 'modules/brand/entities/brand.entity';
+import { Product } from 'modules/product/entities/product.entity';
+import { Review } from 'modules/review/model/review.model';
+import { Color } from 'modules/product/entities/color.entity';
+import { ProductItem } from 'modules/product/entities/productItem.entity';
+import { Variation } from 'modules/variation/entities/variation.entity';
+import { VariationOption } from 'modules/variation/entities/variation-option.entity';
 
 @Module({
   imports: [
@@ -28,7 +39,7 @@ import { AddressModule } from 'modules/address/address.module';
     ConfigModule.forRoot({
       load: [appConfig, dbConfig, jwtConfig, emailConfig],
       isGlobal: true,
-      envFilePath:'.env'
+      envFilePath: '.env'
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -39,9 +50,10 @@ import { AddressModule } from 'modules/address/address.module';
         username: configService.get<string>('dbConfig.user'),
         password: configService.get<string>('dbConfig.password'),
         database: configService.get<string>('dbConfig.dbName'),
-        entites: [User],
-        autoLoadEntities:true,
+        entities: [User, Brand, Variation, Category, Product, Color, ProductItem, Review, VariationOption],
+        autoLoadEntities: true,
         synchronize: true,
+        // logging: true
       }),
       inject: [ConfigService]
     }),
@@ -55,7 +67,7 @@ import { AddressModule } from 'modules/address/address.module';
     //       port: configService.get('REDIS_PORT'),
     //       password: configService.get('REDIS_PASSWORD'),
     //     },
-    //   })
+    //   }),
     // }),
     JwtModule.register({
       secret: 'my secret',
@@ -80,12 +92,16 @@ import { AddressModule } from 'modules/address/address.module';
       inject: [ConfigService],
     }),
     // AuthModule,
+    // RedisCustomModule,
     UserModule,
+    BrandModule,
+    PromotionModule,
     ReviewModule,
+    BrandModule,
     ProductModule,
     AddressModule,
-    // RedisCustomModule,
     VariationModule,
+    CategoryModule,
   ],
   providers: [
     // {
@@ -94,4 +110,6 @@ import { AddressModule } from 'modules/address/address.module';
     // }
   ],
 })
-export class AppModule {}
+
+export class AppModule { }
+
