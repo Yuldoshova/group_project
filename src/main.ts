@@ -10,6 +10,7 @@ async function bootstrap() {
 
   app.enableVersioning({
     type: VersioningType.URI,
+    defaultVersion: "1"
   });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
