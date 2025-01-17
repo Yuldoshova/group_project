@@ -101,6 +101,9 @@ export class CategoryService {
     if (!findCategory) {
       throw new NotFoundException('Category not found❗');
     }
+
+    await this.uploadService.removeFile({ fileName: findCategory.image });
+
     this.categoryRepository.delete({ id });
     return {
       message: 'Success✅',
