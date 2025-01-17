@@ -17,8 +17,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { BrandModule } from 'modules/brand/brand.module';
 import { PromotionModule } from 'modules/promotion/promotion.module';
 import { ReviewModule } from 'modules/review/review.module'
-import { ProductModule } from './modules/product/product.module'
 import { VariationModule } from './modules/variation/variation.module';
+import { ProductModule } from 'modules/product/product.module';
+import { AddressModule } from 'modules/address/address.module';
 import { Category } from 'modules/categories/entities/category.entities';
 import { CategoryModule } from 'modules/categories/category.module';
 import { Brand } from 'modules/brand/entities/brand.entity';
@@ -98,6 +99,7 @@ import { VariationOption } from 'modules/variation/entities/variation-option.ent
     ReviewModule,
     BrandModule,
     ProductModule,
+    AddressModule,
     VariationModule,
     CategoryModule,
   ],
