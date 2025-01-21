@@ -5,29 +5,29 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { Color } from './entities/color.entity';
+import { ProductItem } from './entities/productItem.entity';
+import { UploadService } from 'modules/uploads/upload.service';
+import { CreateProductItemDto } from './dto/create-product-item.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @InjectRepository(ProductItem)
+    private productItemRepository: Repository<ProductItem>,
     @InjectRepository(Color)
-    private colorRepository: Repository<Color>
+    private colorRepository: Repository<Color>,
+    private uploadService: UploadService
   ) { }
+
 
   async createProduct(create: CreateProductDto) {
 
-    const newProduct = this.productRepository.create({
-      name: create.name,
-      description: create.description,
-      image: create.image,
-       // brand:create.brandId,
-      // category:create.categoryId
-    });
+    const newProduct = this.productRepository.create(create);
 
-  
+    await this.productItemRepository.save(newProduct)
 
-    await this.productRepository.save(newProduct);
 
     return {
       message: 'Success✅',
@@ -35,17 +35,46 @@ export class ProductService {
     };
   }
 
-  async createColor(name: string, code: string, productId: number) {
-    const colors = await this.colorRepository.find()
+  async createProductItem(create: CreateProductItemDto, image: Express.Multer.File) {
+
+    const uploadImage = await this.uploadService.uploadFile({
+      file: image,
+      destination: "uploads/products"
+    })
+
+    const newProductItem = this.productItemRepository.create({
+      image: uploadImage.imageUrl,
+      amount: create.amount,
+      price: create.price,
+
+    });
+
+    await this.productItemRepository.save(newProductItem)
+
+
+    return {
+      message: 'Success✅',
+      data: newProductItem,
+    };
+  }
+
+  async createColor(name: string, code: string) {
+    const newColor = this.colorRepository.create({
+      name, code
+    })
+
+    await this.colorRepository.save(newColor)
+
+    return newColor
   }
 
   async findAll() {
-    const users = await this.productRepository.find();
+    const products = await this.productRepository.find();
 
-    
+
     return {
       message: 'Success✅',
-      data: users,
+      data: products,
     };
   }
 

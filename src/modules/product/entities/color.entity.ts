@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ProductItem } from "./productItem.entity";
 
 @Entity({ name: "colors" })
@@ -12,6 +12,6 @@ export class Color {
   @Column({ name: "code", type: "varchar", nullable: false })
   code: string
 
-  @ManyToMany(() => ProductItem, (productItem) => productItem.color)
+  @OneToOne(() => ProductItem, (productItem) => productItem.color)
   productItem: ProductItem
 }

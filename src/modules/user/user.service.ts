@@ -17,18 +17,15 @@ import {
     ) {}
   
     async create(create: CreateUserDto) {
-      // const conflictUser = await this.userRepository.findOneBy({
-      //   email: create.email,
-      // });
-      // if (conflictUser) {
-      //   throw new ConflictException('Email already exists❗');
-      // }
-  
+      const conflictUser = await this.userRepository.findOneBy({
+        email: create.email,
+      });
+      if (conflictUser) {
+        throw new ConflictException('Email already exists❗');
+      }
       const newUser = this.userRepository.create(create);
   
       return await this.userRepository.save(newUser);
-  
-     
     }
   
     async findAll() {
@@ -45,9 +42,7 @@ import {
     }
   
     async findByEmail(email: string) {
-      return await this.userRepository.findOneBy({ email });
-  
-      
+      return await this.userRepository.findOneBy({ email });  
     }
   
     async update(id: number, update: UpdateUserDto) {

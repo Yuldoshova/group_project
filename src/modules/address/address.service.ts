@@ -31,6 +31,4 @@ export class AddressService{
     async delete(id: number){
         return await this.addressRepository.findOne({where:{id}})
     }
-    
-    
 }
