@@ -18,10 +18,10 @@ export class ProductService {
   async createProduct(create: CreateProductDto) {
 
     const newProduct = this.productRepository.create({
-      // name: create.name,
-      // description: create.description,
-      // image: create.image,
-      // brand:create.brandId,
+      name: create.name,
+      description: create.description,
+      image: create.image,
+       // brand:create.brandId,
       // category:create.categoryId
     });
 
@@ -41,6 +41,8 @@ export class ProductService {
 
   async findAll() {
     const users = await this.productRepository.find();
+
+    
     return {
       message: 'Success✅',
       data: users,

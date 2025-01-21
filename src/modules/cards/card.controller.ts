@@ -2,7 +2,9 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@
 import { CardService } from "./card.service";
 import { CreateCardDto } from "./dto/card-create.dto";
 import { UpdateCardDto } from "./dto/update-card.dto";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Card")
 @Controller({ version: "1", path: "card" })
 export class Cardcontroller {
     constructor(private readonly service: CardService) { }
@@ -23,7 +25,5 @@ export class Cardcontroller {
         return this.service.delete(id)
 
     }
-
-
-
+    
 }

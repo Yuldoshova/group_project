@@ -8,32 +8,62 @@ export class ProductController {
   constructor(private readonly productService: ProductService) { }
 
   @Post("/products/add")
-  create(
+  createProduct(
     @Body() createProductDto: CreateProductDto
   ) {
     return this.productService.createProduct(createProductDto);
   }
 
   @Get("/products/all")
-  findAll() {
+  findAllProduct() {
     return this.productService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  @Get('/products/single/:id')
+  findOneProduct(@Param('id', ParseIntPipe) id: number) {
     return this.productService.findOne(id);
   }
 
-  @Patch(':id')
-  update(
+  @Patch('/products/update/:id')
+  updateProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto
   ) {
     return this.productService.update(id, updateProductDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  @Delete('/products/delete:id')
+  removeProduct(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.remove(id);
+  }
+
+  @Post("/product-items/add")
+  createProductItem(
+    @Body() createProductDto: CreateProductDto
+  ) {
+    return this.productService.createProduct(createProductDto);
+  }
+
+  @Get("/product-items/all")
+  findAllProductItem() {
+    return this.productService.findAll();
+  }
+
+  @Get('/product-items/single/:id')
+  findOneProductItem(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.findOne(id);
+  }
+
+  @Patch('/product-items/update/:id')
+  updateProductItem(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateProductDto: UpdateProductDto
+  ) {
+    return this.productService.update(id, updateProductDto);
+  }
+
+  @Delete('/product-items/delete:id')
+  removeProductItem(@Param('id', ParseIntPipe) id: number) {
     return this.productService.remove(id);
   }
 }
