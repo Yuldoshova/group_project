@@ -29,6 +29,7 @@ import { Color } from 'modules/product/entities/color.entity';
 import { ProductItem } from 'modules/product/entities/productItem.entity';
 import { Variation } from 'modules/variation/entities/variation.entity';
 import { VariationOption } from 'modules/variation/entities/variation-option.entity';
+import { CardModule } from 'modules/cards/card.module';
 
 @Module({
   imports: [
@@ -92,6 +93,10 @@ import { VariationOption } from 'modules/variation/entities/variation-option.ent
       inject: [ConfigService],
     }),
     // AuthModule,
+    UserModule,
+    ReviewModule,
+    ProductModule,
+    CardModule,
     // RedisCustomModule,
     UserModule,
     BrandModule,

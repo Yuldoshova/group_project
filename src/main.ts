@@ -6,7 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import ExceptionHandlerFilter from 'exceptionFilter/all-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{ logger: ['log', 'error', 'warn', 'debug'] });
 
   app.enableVersioning({
     type: VersioningType.URI,
