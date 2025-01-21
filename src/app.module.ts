@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { appConfig } from './config/app.config';
@@ -6,17 +7,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { jwtConfig } from './config/jwt.config';
 import { emailConfig } from './config/email.config';
 import { User } from './modules/user/entities/user.entity';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { RedisModule } from '@nestjs-modules/ioredis';
+import { ThrottlerModule } from '@nestjs/throttler';
+// import { RedisModule } from '@nestjs-modules/ioredis';
 import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
 // import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 // import { RedisCustomModule } from './client/redis.module';
-import { APP_GUARD } from '@nestjs/core';
+// import { APP_GUARD } from '@nestjs/core';
 import { BrandModule } from 'modules/brand/brand.module';
 import { PromotionModule } from 'modules/promotion/promotion.module';
-import { ReviewModule } from 'modules/review/review.module'
+import { ReviewModule } from 'modules/review/review.module';
 import { VariationModule } from './modules/variation/variation.module';
 import { ProductModule } from 'modules/product/product.module';
 import { AddressModule } from 'modules/address/address.module';
@@ -29,33 +30,48 @@ import { Color } from 'modules/product/entities/color.entity';
 import { ProductItem } from 'modules/product/entities/productItem.entity';
 import { Variation } from 'modules/variation/entities/variation.entity';
 import { VariationOption } from 'modules/variation/entities/variation-option.entity';
+import { RegionModule } from 'modules/region/region.model';
+import { Region } from 'modules/region/etity/region.entity';
 
 @Module({
   imports: [
-    ThrottlerModule.forRoot([{
-      ttl: 30000,
-      limit: 300,
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 30000,
+        limit: 300,
+      },
+    ]),
     ConfigModule.forRoot({
       load: [appConfig, dbConfig, jwtConfig, emailConfig],
       isGlobal: true,
-      envFilePath: '.env'
+      envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: "postgres",
+        type: 'postgres',
         port: configService.get<number>('dbConfig.port'),
         host: configService.get<string>('dbConfig.host'),
         username: configService.get<string>('dbConfig.user'),
         password: configService.get<string>('dbConfig.password'),
         database: configService.get<string>('dbConfig.dbName'),
-        entities: [User, Brand, Variation, Category, Product, Color, ProductItem, Review, VariationOption],
+        entities: [
+          User,
+          Brand,
+          Variation,
+          Category,
+          Product,
+          Color,
+          ProductItem,
+          Review,
+          VariationOption,
+          Region,
+        ],
         autoLoadEntities: true,
         synchronize: true,
         // logging: true
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     // RedisModule.forRootAsync({
     //   imports: [ConfigModule],
@@ -102,6 +118,7 @@ import { VariationOption } from 'modules/variation/entities/variation-option.ent
     AddressModule,
     VariationModule,
     CategoryModule,
+    RegionModule,
   ],
   providers: [
     // {
@@ -110,6 +127,4 @@ import { VariationOption } from 'modules/variation/entities/variation-option.ent
     // }
   ],
 })
-
-export class AppModule { }
-
+export class AppModule {}

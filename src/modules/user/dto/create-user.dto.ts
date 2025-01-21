@@ -38,7 +38,7 @@ export class CreateUserDto {
     example: UserRoles.ADMIN,
     description: 'Role of the user',
     enum: UserRoles,
-    enumName: 'UserRoles', 
+    enumName: 'UserRoles',
   })
   @IsOptional()
   @IsEnum(UserRoles)

@@ -14,15 +14,14 @@ export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-    private uploadService: UploadService
-  ) { }
+    private uploadService: UploadService,
+  ) {}
 
   async createCategory(create: CreateCategoryDto, image: Express.Multer.File) {
     const uploadImage = await this.uploadService.uploadFile({
       file: image,
-      destination: "uploads/categories/images"
-    })
-
+      destination: 'uploads/categories/images',
+    });
 
     const existingCategory = await this.categoryRepository.findOne({
       where: { name: create.name },
@@ -34,7 +33,7 @@ export class CategoryService {
 
     const newCategory = this.categoryRepository.create({
       name: create.name,
-      image: uploadImage.imageUrl
+      image: uploadImage.imageUrl,
     });
 
     await this.categoryRepository.save(newCategory);

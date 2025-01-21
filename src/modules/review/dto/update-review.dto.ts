@@ -1,20 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsInt, IsString } from 'class-validator';
+import { IsOptional, IsInt, IsString, IsEnum } from 'class-validator';
 import { reviewValue } from 'utils/review-value.enum';
 
 export class UpdateReviewDto {
-  @ApiProperty({ example: 'Updated comment!', description: 'Updated user comment for the review', required: false })
-
+  @ApiProperty({
+    example: 'Updated comment!',
+    description: 'Updated user comment for the review',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   comment?: string;
 
-  @ApiProperty({ example: 1, description: 'ID of the user writing the review' })
+  @ApiProperty({
+    example: 1,
+    description: 'ID of the user writing the review',
+    required: false,
+  })
   @IsOptional()
   @IsInt()
   user_id?: number;
 
-  @ApiProperty({ example: 1, description: 'ID of the product being reviewed' })
+  @ApiProperty({
+    example: 1,
+    description: 'ID of the product being reviewed',
+    required: false,
+  })
   @IsOptional()
   @IsInt()
   product_id?: number;
@@ -26,6 +37,6 @@ export class UpdateReviewDto {
     required: false,
   })
   @IsOptional()
-  @IsInt()
+  @IsEnum(reviewValue)
   value?: reviewValue;
 }

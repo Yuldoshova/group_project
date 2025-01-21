@@ -1,3 +1,4 @@
+// import { Order } from 'modules/order/entity/order.entity';
 import { Review } from 'modules/review/model/review.model';
 import {
   Column,
@@ -9,7 +10,7 @@ import {
 } from 'typeorm';
 import { UserRoles } from 'utils/user-role.enum';
 
-@Entity({ name: 'users' })
+@Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -32,7 +33,10 @@ export class User {
   role: UserRoles;
 
   @OneToMany(() => Review, (review) => review.user)
-  reviews: Array<Review>
+  reviews: Array<Review>;
+
+  // @OneToMany(() => Order, (order) => order.user, { nullable: false })
+  // order: Order;
 
   @CreateDateColumn({
     name: 'created_at',

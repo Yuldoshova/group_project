@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
@@ -10,11 +11,11 @@ async function bootstrap() {
 
   app.enableVersioning({
     type: VersioningType.URI,
-    defaultVersion: "1"
+    defaultVersion: '1',
   });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
-  app.useGlobalFilters(new ExceptionHandlerFilter())
+  app.useGlobalFilters(new ExceptionHandlerFilter());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('ASHYO SHOP')
@@ -26,14 +27,16 @@ async function bootstrap() {
     SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, documentFactory);
 
-  const appConfig = app.get(ConfigService)
+  const appConfig = app.get(ConfigService);
 
   await app.listen(
     appConfig.get<number>('appConfig.port'),
-    appConfig.get<string>('appConfig.host'), () => {
-      console.log(`Server running port on ${appConfig.get<number>('appConfig.port')}`)
-    });
+    appConfig.get<string>('appConfig.host'),
+    () => {
+      console.log(
+        `Server running port on ${appConfig.get<number>('appConfig.port')}`,
+      );
+    },
+  );
 }
 bootstrap();
-
-

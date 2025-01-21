@@ -1,43 +1,49 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  //   ManyToOne,
-  //   OneToMany,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  // JoinColumn,
+  // ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-// import { User } from '../user/user.entity';
-import { ApiProperty } from '@nestjs/swagger';
-import { OrderItem } from 'modules/order-item/entity/order-item.entity';
+import { OrderStatus } from './orderEnum.status';
+// import { User } from 'modules/user/entities/user.entity';
+import { Address } from 'modules/address/entities/address.entitiy';
+import { OrderItem } from './orderItem.entity';
 
-@Entity()
+@Entity({ name: 'order' })
 export class Order {
   @PrimaryGeneratedColumn()
-  @ApiProperty()
   id: number;
 
-  //   @ManyToOne(() => User, (user) => user.orders)
-  //   @ApiProperty()
-  //   user: User;
+  // @ManyToOne(() => User, (user) => user.order, { nullable: false }) // orderId o'rniga order deb yozildi
+  // @JoinColumn({ name: 'user_id' })
+  // user: User;
 
-  //   @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
-  @ApiProperty({ type: () => [OrderItem] })
-  items: OrderItem[];
+  @Column({
+    type: 'enum',
+    enum: OrderStatus,
+    default: OrderStatus.PENDING,
+  })
+  status: OrderStatus;
 
   @Column('decimal')
-  @ApiProperty()
   totalPrice: number;
 
-  @Column({ default: 'pending' })
-  @ApiProperty()
-  status: string;
+  @Column({ name: 'orderDate', type: 'date', nullable: true })
+  orderDate: Date;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.orderId)
+  orderItems: Array<OrderItem>;
+
+  @OneToOne(() => Address, (address) => address.id)
+  orderAddressId: number;
 
   @CreateDateColumn()
-  @ApiProperty()
   createdAt: Date;
 
-  @UpdateDateColumn()
-  @ApiProperty()
+  @CreateDateColumn()
   updatedAt: Date;
 }

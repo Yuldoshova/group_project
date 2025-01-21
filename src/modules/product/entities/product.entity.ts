@@ -1,35 +1,45 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Color } from "./color.entity";
-import { Brand } from "modules/brand/entities/brand.entity";
-import { Category } from "modules/categories/entities/category.entities";
-import { ProductItem } from "./productItem.entity";
-import { Review } from "modules/review/model/review.model";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  // JoinTable,
+  // ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+// import { Color } from './color.entity';
+import { Brand } from 'modules/brand/entities/brand.entity';
+import { Category } from 'modules/categories/entities/category.entities';
+import { ProductItem } from './productItem.entity';
+import { Review } from 'modules/review/model/review.model';
 
-@Entity({ name: "products" })
+@Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
-  @Column({ name: "image", type: "varchar", nullable: false })
-  image: string
+  @Column({ name: 'image', type: 'varchar', nullable: false })
+  image: string;
 
-  @Column({ name: "name", type: "varchar", length: 100, nullable: false })
-  name: string
+  @Column({ name: 'name', type: 'varchar', length: 100, nullable: false })
+  name: string;
 
-  @Column({ name: "description", type: "varchar", nullable: true })
-  description: string
+  @Column({ name: 'description', type: 'varchar', nullable: true })
+  description: string;
 
   @ManyToOne(() => Brand, (brand) => brand.products)
-  brand: Brand
+  brand: Brand;
 
   @ManyToOne(() => Category, (category) => category.products)
-  category: Category
+  category: Category;
 
   @OneToMany(() => ProductItem, (productItem) => productItem.product)
-  productItems: Array<ProductItem>
+  productItems: Array<ProductItem>;
 
   @OneToMany(() => Review, (review) => review.product)
-  reviews: Array<Review>
+  reviews: Array<Review>;
 
   @CreateDateColumn({
     name: 'created_at',

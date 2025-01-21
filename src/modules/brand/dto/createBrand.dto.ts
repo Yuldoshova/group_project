@@ -1,8 +1,14 @@
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateBrandDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(50)
-  name: string;
+  @ApiProperty({
+    description: 'The name of the brand',
+    example: 'Nike',
+    required: false,
+  })
+  name?: string;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -25,8 +26,8 @@ export class CategoryController {
   @UseInterceptors(FileInterceptor('image'))
   create(
     @Body() createCategoryDto: CreateCategoryDto,
-    @UploadedFile() image: Express.Multer.File
-    ) {
+    @UploadedFile() image: Express.Multer.File,
+  ) {
     return this.categoryService.createCategory(createCategoryDto, image);
   }
 

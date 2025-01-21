@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateRegionDto {
@@ -6,6 +6,7 @@ export class UpdateRegionDto {
     description: 'Region nomi',
     required: true,
   })
+  @IsNotEmpty()
   @IsString()
   name: string;
 }

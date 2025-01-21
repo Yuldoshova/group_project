@@ -12,11 +12,11 @@ export class ProductService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
     @InjectRepository(Color)
-    private colorRepository: Repository<Color>
-  ) { }
+    private colorRepository: Repository<Color>,
+  ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async createProduct(create: CreateProductDto) {
-
     const newProduct = this.productRepository.create({
       // name: create.name,
       // description: create.description,
@@ -24,8 +24,6 @@ export class ProductService {
       // brand:create.brandId,
       // category:create.categoryId
     });
-
-  
 
     await this.productRepository.save(newProduct);
 
@@ -35,9 +33,9 @@ export class ProductService {
     };
   }
 
-  async createColor(name: string, code: string, productId: number) {
-    const colors = await this.colorRepository.find()
-  }
+  // async createColor(name: string, code: string, productId: number) {
+  //   const colors = await this.colorRepository.find();
+  // }
 
   async findAll() {
     const users = await this.productRepository.find();
