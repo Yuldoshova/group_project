@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 export const dbConfig = () => ({
   dbConfig: {
     port: process.env.DB_PORT,

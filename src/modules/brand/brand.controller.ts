@@ -1,38 +1,51 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { BrandService } from "./brand.service";
-import { CreateBrandDto, UpdateBrandDto } from "./dto/brand.dto";
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { BrandService } from './brand.service';
+import { CreateBrandDto } from './dto/create-brand.dto';
+import { UpdateBrandDto } from './dto/update-brand.dto';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('brands')
+@ApiTags("Brand")
+@Controller({ version: "1", path: "brands" })
 export class BrandController {
-    constructor(private readonly brandService: BrandService) {}
+  constructor(private readonly brandService: BrandService) { }
 
-    @Post()
-    create(@Body() CreateBrandDto: CreateBrandDto){
-        return this.brandService.create(CreateBrandDto);
-    }
+  @ApiConsumes("multipart/form-data")
+  @Post("/add")
+  @UseInterceptors(FileInterceptor("image"))
+  create(
+    @Body() createBrandDto: CreateBrandDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandService.create({ ...createBrandDto, image });
+  }
 
-    @Get()
-    findAll(){
-        return this.brandService.findAll();
-    }
+  @Get("/all")
+  findAll() {
+    return this.brandService.findAll();
+  }
 
-    @Get(':id')
-    findOne(@Param('id') id: string){
-        return this.brandService.findOne(+id);
-    }
+  @Get('/single/:id')
+  findOne(
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    return this.brandService.findOne(id);
+  }
 
-    @Put(':id')
-    update(@Param('id') id: string, @Body() UpdateBrandDto: UpdateBrandDto){
-        return this.brandService.update(+id, UpdateBrandDto);
-    }
+  @Patch('/update/:id')
+  @UseInterceptors(FileInterceptor("image"))
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateBrandDto: UpdateBrandDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandService.update(id, {...updateBrandDto, image});
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string){
-        return this.brandService.remove(+id);
-    }
-
+  @Delete('/remove/:id')
+  remove(
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    return this.brandService.remove(id);
+  }
 }
-
-
-
-

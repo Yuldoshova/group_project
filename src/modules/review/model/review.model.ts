@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { reviewValue } from "utils/review-value.enum";
+import { reviewValue } from "@utils";
+import { Product } from "src/modules/product/entities/product.entity";
+import { User } from "src/modules/user";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('review')
 export class Review {
@@ -9,19 +11,16 @@ export class Review {
     @Column({ type: "varchar", nullable: true })
     comment: string
 
-    @Column({ type: "integer"})
-    user_id: number
+    @ManyToOne(() => User, (user) => user.reviews)
+    user: User
 
-    @Column({ type: "integer" })
-    product_id: number
+    @ManyToOne(() => Product, (product) => product.reviews)
+    product: Product
 
     @Column({
-        type: "enum",
-        enum: reviewValue,
-        nullable: true
+        nullable: true,
+        enum:reviewValue
     })
     value: reviewValue
-
-
 
 }

@@ -1,46 +1,90 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Brand } from "./entities/brand.entity";
-import { Repository } from "typeorm";
-import { CreateBrandDto, UpdateBrandDto } from "./dto/brand.dto";
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateBrandDto } from './dto/create-brand.dto';
+import { UpdateBrandDto } from './dto/update-brand.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Brand } from './entities/brand.entity';
+import { Repository } from 'typeorm';
+import { UploadService } from '../upload';
 
 @Injectable()
 export class BrandService {
-    constructor(
-        @InjectRepository(Brand)
-        private readonly brandRepository: Repository<Brand>,
-    ) {}
 
-    async create(createBrandDto: CreateBrandDto): Promise<Brand>{
-        const brand = this.brandRepository.create(createBrandDto);
-        return this.brandRepository.save(brand);
+  constructor(
+    @InjectRepository(Brand)
+    private brandRepository: Repository<Brand>,
+    private uploadService: UploadService
+  ) { }
+
+  async create(create: CreateBrandDto) {
+
+    const uploadImage = this.uploadService.uploadFile({
+      file: create.image,
+      destination: "uploads/brands"
+    })
+
+    const conflictColor = await this.brandRepository.findOneBy({
+      name: create.name
+    });
+    if (conflictColor) {
+      throw new ConflictException('Brand name already exists❗');
+    }
+    const newBrand = this.brandRepository.create({
+      name: create.name,
+      image: (await uploadImage).imageUrl
+    });
+
+    await this.brandRepository.save(newBrand);
+
+    return newBrand
+  }
+
+  async findAll() {
+    return await this.brandRepository.find({
+      relations: ["products"]
+    });
+  }
+
+  async findOne(id: number) {
+    const findBrand = await this.brandRepository.findOne({ where: { id } });
+    if (!findBrand) {
+      throw new NotFoundException('Brand not found❗');
+    }
+    return findBrand
+  }
+
+  async update(id: number, update: UpdateBrandDto) {
+    const [findBrand, conflictUser] = await Promise.all([
+      this.brandRepository.findOne({ where: { id } }),
+      this.brandRepository.findOneBy({ name: update.name }),
+    ]);
+
+    if (!findBrand) {
+      throw new NotFoundException('Brand not found❗');
+    }
+    if (conflictUser) {
+      throw new ConflictException('Brand name already exists❗');
     }
 
-    findAll(): Promise<Brand[]>{
-        return this.brandRepository.find();
+    if (findBrand.image) {
+      await this.uploadService.removeFile({ fileName: findBrand.image });
     }
+    const uploadImage = await this.uploadService.uploadFile({
+      file: update.image,
+      destination: "uploads/brands"
+    })
 
-    async findOne(id: number): Promise<Brand> {
-        const brand = await this.brandRepository.findOneBy({ id });
-        if (!brand) {
-            throw new NotFoundException(`Brand with ID ${id} not found`);
-        }
-        return brand;
-    }
+    return await this.brandRepository.update({ id }, {
+      image: uploadImage.imageUrl,
+      name: update.name
+    });
+  }
 
-    async update(id: number, updateBrandDto: UpdateBrandDto): Promise<Brand>{
-        const brand = await this.findOne(id);
-        Object.assign(brand, updateBrandDto);
-        return this.brandRepository.save(brand);
+  async remove(id: number) {
+    const findBrand = await this.brandRepository.findOne({ where: { id } });
+    if (!findBrand) {
+      throw new NotFoundException('Brand not found❗');
     }
-
-    async remove(id: number): Promise<void> {
-        const brand = await this.findOne(id);
-        await this.brandRepository.remove(brand);
-    }
+    await this.uploadService.removeFile({ fileName: findBrand.image });
+    return this.brandRepository.delete({ id });
+  }
 }
-
-
-
-
-

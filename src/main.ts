@@ -1,15 +1,17 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import ExceptionHandlerFilter from 'exceptionFilter/all-exception.filter';
+import morgan from 'morgan';
+import { ExceptionHandlerFilter } from '@filters';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug'] });
 
   app.enableVersioning({
     type: VersioningType.URI,
+    defaultVersion: "1"
   });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
@@ -17,9 +19,9 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('ASHYO SHOP')
-    .setDescription('The movie app apis')
+    .setDescription('The ashyo backend apis')
     .setVersion('1.0')
-    .addTag('apis')
+    .addTag('APIS')
     .build();
   const documentFactory = () =>
     SwaggerModule.createDocument(app, swaggerConfig);
@@ -34,3 +36,5 @@ async function bootstrap() {
     });
 }
 bootstrap();
+
+

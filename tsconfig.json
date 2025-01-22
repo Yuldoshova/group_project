@@ -9,13 +9,39 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@redis": [
+        "./src/client"
+      ],
+      "@config": [
+        "./src/config"
+      ],
+      "@decorators": [
+        "./src/decorators"
+      ],
+      "@filters": [
+        "./src/filters"
+      ],
+      "@guards": [
+        "src/guards"
+      ],
+      "@modules": [
+        "./src/modules"
+      ],
+      "@seeds": [
+        "./src/seeds"
+      ],
+      "@utils": [
+        "./src/utils"
+      ]
+    }
   }
 }
