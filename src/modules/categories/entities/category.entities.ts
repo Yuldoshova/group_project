@@ -22,7 +22,7 @@ export class Category {
   @ManyToOne(() => Brand, (brand) => brand.categories)
   brand: Brand;
 
-  @ManyToOne(() => Category, (category) => category.id)
+  @ManyToOne(() => Category, (category) => category.children)
   parent: Category;
 
   @Column({ name: 'image', type: 'varchar', nullable: true })
@@ -36,6 +36,9 @@ export class Category {
 
   @OneToMany(() => Variation, (variation) => variation.category)
   variations: Array<Variation>
+
+  @OneToMany(() => Category, (category) => category.parent)
+  children: Array<Category>
 
   @CreateDateColumn({
     name: 'created_at',

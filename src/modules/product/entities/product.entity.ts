@@ -12,7 +12,7 @@ export class Product {
   @Column({ name: "image", type: "varchar", nullable: false })
   image: string
 
-  @Column({ name: "name", type: "varchar", length: 100, nullable: false })
+  @Column({ name: "name", type: "varchar", length: 100 })
   name: string
 
   @Column({ name: "description", type: "varchar", nullable: true })

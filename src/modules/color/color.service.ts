@@ -28,9 +28,7 @@ export class ColorService {
   }
 
   async findAll() {
-    return await this.colorRepository.find({
-      relations: ["product_items"]
-    });
+    return await this.colorRepository.find();
   }
 
   async findOne(id: number) {

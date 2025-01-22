@@ -50,7 +50,7 @@ export class CategoryService {
   }
 
   async findAll() {
-    const categories = await this.categoryRepository.find({ relations: ["categories"] });
+    const categories = await this.categoryRepository.find({ relations: ["children", "products"] });
     return {
       message: 'Success✅',
       data: categories,

@@ -3,12 +3,13 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
-@Controller({ version: "1", path:"products" })
+@Controller({ version: "1", path: "products" })
 export class ProductController {
   constructor(private readonly productService: ProductService) { }
 
+  @ApiConsumes("multipart/form-data")
   @Post("/add")
   @UseInterceptors(FileInterceptor('image'))
   createProduct(

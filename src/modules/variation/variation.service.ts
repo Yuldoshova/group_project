@@ -12,7 +12,7 @@ export class VariationService {
     private variationRepository: Repository<Variation>
   ) { }
 
-  async create(create: CreateVariationDto) {
+  async createVariation(create: CreateVariationDto) {
     const conflictVariation = await this.variationRepository.findOneBy({
       name: create.name
     });
@@ -21,7 +21,7 @@ export class VariationService {
     }
 
     const newVariation = this.variationRepository.create({
-
+name:create.name
     });
 
     await this.variationRepository.save(newVariation);

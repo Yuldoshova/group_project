@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseInt
 import { BrandService } from './brand.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags("Brand")
@@ -10,6 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class BrandController {
   constructor(private readonly brandService: BrandService) { }
 
+  @ApiConsumes("multipart/form-data")
   @Post("/add")
   @UseInterceptors(FileInterceptor("image"))
   create(

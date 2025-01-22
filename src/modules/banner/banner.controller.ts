@@ -31,23 +31,8 @@ export class BannerController {
   constructor(private readonly bannerService: BannerService) {}
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const filename = `${Date.now()}-${file.originalname}`;
-          callback(null, filename);
-        },
-      }),
-    }),
-  )
-  @ApiOperation({ summary: 'Banner yaratish va rasm yuklash' })
-  @ApiResponse({
-    status: 201,
-    description: 'Banner yaratildi va rasm yuklandi',
-    type: Banner,
-  })
+   @ApiOperation({ summary: 'Banner yaratish va rasm yuklash' })
+
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: "Banner va rasm ma'lumotlari",

@@ -15,12 +15,16 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
 import { RedisService } from '@redis';
-import { UserService } from '../user';
+import { User, UserService } from '../user';
 import { CheckOtpDto, LoginDto, RefreshDto } from './dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(User)
+    private userRepository:Repository<User>,
     private userService: UserService,
     private redisService: RedisService,
     private mailService: MailerService,
@@ -33,7 +37,7 @@ export class AuthService {
 
     const findUser = await this.userService.findByEmail(payload.email)
     if (!findUser) {
-      const newUser = await this.userService.create({ email: payload.email })
+      const newUser = await this.userRepository.create({ email: payload.email })
 
       await this.redisService.setValue({
         key: `otp-${newUser.id}`,

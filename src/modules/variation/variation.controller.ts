@@ -9,7 +9,7 @@ export class VariationController {
 
   @Post("/variations/add")
   createVariation(@Body() createVariationDto: CreateVariationDto) {
-    return this.variationService.create(createVariationDto);
+    return this.variationService.createVariation(createVariationDto);
   }
 
   @Get("/variations/all")
@@ -32,10 +32,6 @@ export class VariationController {
     return this.variationService.remove(+id);
   }
 
-  @Post("/variation-options/add")
-  createVariationOption(@Body() createVariationDto: CreateVariationDto) {
-    return this.variationService.create(createVariationDto);
-  }
 
   @Get("/variations-options/all")
   findAllVariationOption() {

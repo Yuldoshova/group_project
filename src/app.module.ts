@@ -66,18 +66,18 @@ import { PromotionModule } from './modules/promotion/promotion.module';
       }),
       inject: [ConfigService]
     }),
-    // RedisModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: (configService: ConfigService) => ({
-    //     type: 'single',
-    //     options: {
-    //       host: configService.get('REDIS_HOST'),
-    //       port: configService.get('REDIS_PORT'),
-    //       password: configService.get('REDIS_PASSWORD'),
-    //     },
-    //   }),
-    // }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'single',
+        options: {
+          host: configService.get('REDIS_HOST'),
+          port: configService.get('REDIS_PORT'),
+          password: configService.get('REDIS_PASSWORD'),
+        },
+      }),
+    }),
     JwtModule.register({
       secret: 'my secret',
       global: true,
@@ -100,9 +100,9 @@ import { PromotionModule } from './modules/promotion/promotion.module';
       }),
       inject: [ConfigService],
     }),
-    // RedisCustomModule,
+    RedisCustomModule,
     UploadModule,
-    // AuthModule,
+    AuthModule,
     UserModule,
     ColorModule,
     BrandModule,

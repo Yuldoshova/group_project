@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 import { UploadService } from '../upload';
 import { BrandService } from '../brand/brand.service';
 import { CategoryService } from '../categories/category.service';
-import { ProductFilterDto } from './dto/product-filter.dto';
 
 @Injectable()
 export class ProductService {
@@ -113,7 +112,7 @@ export class ProductService {
     return products;
   }
 
-  async createProduct(create: CreateProductDto, image: Express.Multer.File) {
+  async createProduct(create: CreateProductDto, image:Express.Multer.File ) {
 
     const uploadImage = await this.uploadService.uploadFile({
       file: image,
@@ -156,7 +155,7 @@ export class ProductService {
       throw new NotFoundException('Product not found❗');
     }
 
-    await this.productRepository.update({ id }, { ...update });
+    // await this.productRepository.update({ id }, { ...update });
 
     return {
       message: 'Success✅',

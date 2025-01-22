@@ -1,5 +1,5 @@
 import { ApiProperty, ApiSchema } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 @ApiSchema({ name: 'CareteCategoryRequest' })
 export class CreateCategoryDto {
@@ -23,7 +23,7 @@ export class CreateCategoryDto {
 
   @ApiProperty({
     type: 'number',
-    required: true,
+    required: false,
     example: 2,
   })
   // @IsNumber()
@@ -31,19 +31,18 @@ export class CreateCategoryDto {
   parent_id?: number;
 
   @ApiProperty({
-    type: 'string',
-    required: true,
+    type: String,
+    format: 'binary',
+    required: false,
   })
-  // @IsString()
-  // @IsNotEmpty()
-  image?: string;
+  @IsOptional()
+  image?: Express.Multer.File;
 
   @ApiProperty({
-    type: 'string',
-    required: true,
-    example: '📱',
-  })
-  // @IsString()
-  // @IsNotEmpty()
-  icon?: string;
+      type: String,
+      format: 'binary',
+      required: false,
+    })
+    @IsOptional()
+  icon?: Express.Multer.File;
 }
