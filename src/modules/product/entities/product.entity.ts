@@ -4,6 +4,7 @@ import { Brand } from "modules/brand/entities/brand.entity";
 import { Category } from "modules/categories/entities/category.entities";
 import { ProductItem } from "./productItem.entity";
 import { Review } from "modules/review/model/review.model";
+import { CartItem } from "modules/cards/entities/cardItem.entity";
 
 @Entity({ name: "products" })
 export class Product {
@@ -30,6 +31,9 @@ export class Product {
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Array<Review>
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product_item)
+  cartItems: Array<CartItem>
 
   @CreateDateColumn({
     name: 'created_at',

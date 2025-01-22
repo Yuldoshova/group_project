@@ -35,6 +35,20 @@ export class CreateUserDto {
   email: string;
 
   @ApiPropertyOptional({
+    example: 1,
+    description: 'Address ID (optional during user creation)',
+  })
+  @IsOptional()
+  address_id?: number
+
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Review ID (optional during user creation)',
+  })
+  @IsOptional()
+  review_id?: number
+
+  @ApiPropertyOptional({
     example: UserRoles.ADMIN,
     description: 'Role of the user',
     enum: UserRoles,
