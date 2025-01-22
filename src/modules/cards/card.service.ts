@@ -1,43 +1,79 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Card } from "./entities/card.entity";
-import { Repository } from "typeorm";
-import { CreateCardDto } from "./dto/card-create.dto";
-import { UpdateCardDto } from "./dto/update-card.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Card } from './entities/card.entity';
+import { CreateCardDto } from './dto/card-create.dto';
+import { UpdateCardDto } from './dto/update-card.dto';
 
 @Injectable()
-export class CardService{
+export class CardService {
+  getOne(id: number) {
+      throw new Error('Method not implemented.');
+  }
+  getAll() {
+      throw new Error('Method not implemented.');
+  }
+  constructor(
+    @InjectRepository(Card)
+    private readonly cardRepository: Repository<Card>,
+  ) {}
 
-    constructor(@InjectRepository(Card) private readonly cardRepository: Repository<Card>){}
-    async create(cardData: CreateCardDto){
-        const card = this.cardRepository.create(cardData)
-        return await this.cardRepository.save(card)
-    }
-    async getAll(){
+  async create(cardData: CreateCardDto) {
+    const newCard = this.cardRepository.create(cardData);
+    await this.cardRepository.save(newCard);
 
-        const card =  await this.cardRepository.find()
-        console.log(card)
-        return card
-    }
-    async update(id: number, cardData: UpdateCardDto) {
-        const updateData = await this.cardRepository.findOne({ where: { id } });
-        if (!updateData) {
-            throw new NotFoundException('Card not found');
-        }
-    
-        Object.assign(updateData, cardData);
-        return await this.cardRepository.save(updateData);
-    }
-    async delete(id: number){
-        const isCard = await this.cardRepository.findOne({where:{id}})
-        if(!isCard){
-            return {
-                message:"Card Not found",
-                statusCode: 404
-            }
-        }
-        return await this.cardRepository.remove(isCard)
+    return {
+      message: 'Card created successfully ✅',
+      data: newCard,
+    };
+  }
+
+  async findAll() {
+    const cards = await this.cardRepository.find();
+
+    return {
+      message: 'Success ✅',
+      data: cards,
+    };
+  }
+
+  async findOne(id: number) {
+    const card = await this.cardRepository.findOne({ where: { id } });
+    if (!card) {
+      throw new NotFoundException(`Card with ID ${id} not found`);
     }
 
+    return {
+      message: 'Success ✅',
+      data: card,
+    };
+  }
 
+  async update(id: number, cardData: UpdateCardDto) {
+    const card = await this.cardRepository.findOne({ where: { id } });
+    if (!card) {
+      throw new NotFoundException(`Card with ID ${id} not found`);
+    }
+
+    await this.cardRepository.update({ id }, { ...cardData });
+
+    return {
+      message: 'Card updated successfully ✅',
+      data: id,
+    };
+  }
+
+  async delete(id: number) {
+    const card = await this.cardRepository.findOne({ where: { id } });
+    if (!card) {
+      throw new NotFoundException(`Card with ID ${id} not found`);
+    }
+
+    await this.cardRepository.delete({ id });
+
+    return {
+      message: 'Card deleted successfully ✅',
+      data: id,
+    };
+  }
 }
