@@ -4,6 +4,7 @@ import { Brand } from "modules/brand/entities/brand.entity";
 import { Category } from "modules/categories/entities/category.entities";
 import { ProductItem } from "./productItem.entity";
 import { Review } from "modules/review/model/review.model";
+import { Banner } from "modules/banner/entities/banner.entity";
 
 @Entity({ name: "products" })
 export class Product {
@@ -15,6 +16,8 @@ export class Product {
 
   @Column({ name: "name", type: "varchar", length: 100, nullable: false })
   name: string
+
+  
 
   @Column({ name: "description", type: "varchar", nullable: true })
   description: string
@@ -30,6 +33,9 @@ export class Product {
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Array<Review>
+
+  @OneToMany(() => Banner, (banner) => banner.product)
+  banner: Array<Banner>
 
   @CreateDateColumn({
     name: 'created_at',

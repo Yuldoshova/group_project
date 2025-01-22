@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Product } from 'modules/product/entities/product.entity';
+import banner from '..';
 
 @Entity()
 export class Banner {
@@ -39,4 +41,7 @@ export class Banner {
     required: false,
   })
   image: string;
+
+  @ManyToOne(()=> Product,(product) => product.banner)
+  product: Product
 }

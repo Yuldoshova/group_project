@@ -6,29 +6,63 @@ import {
   import { Repository } from 'typeorm';
   import { InjectRepository } from '@nestjs/typeorm';
   import { User } from './entities/user.entity';
-  import { CreateUserDto } from './dto/create-users.dto';
   import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { Address } from 'modules/address/entities/address.entitiy';
+import { Review } from 'modules/review/model/review.model';
   
   @Injectable()
   export class UserService {
     constructor(
       @InjectRepository(User)
       private userRepository: Repository<User>,
+      @InjectRepository(Address)
+      private addressRepository: Repository<Address>,
+      @InjectRepository(Review)
+      private reviewRepository: Repository<Review>
     ) {}
   
     async create(create: CreateUserDto) {
-      // const conflictUser = await this.userRepository.findOneBy({
-      //   email: create.email,
-      // });
-      // if (conflictUser) {
-      //   throw new ConflictException('Email already exists❗');
-      // }
-  
-      const newUser = this.userRepository.create(create);
-  
+      // Email conflict tekshiruvi
+      const conflictUser = await this.userRepository.findOneBy({
+        email: create.email,
+      });
+      if (conflictUser) {
+        throw new ConflictException('Email already exists❗');
+      }
+    
+      let address: Address | null = null;
+    
+      if (create.address_id) {
+        address = await this.addressRepository.findOneBy({
+          id: create.address_id,
+        });
+        if (!address) {
+          throw new NotFoundException('Address not found❗');
+        }
+      }
+
+
+      let reviews: Review[] = [null];
+    
+      if (create.review_id) {
+        const review = await this.reviewRepository.findOneBy({
+          id: create.review_id,
+        });
+        if (!review) {
+          throw new NotFoundException('Review not found❗');
+        }
+        reviews.push(review)
+      }
+    
+      const newUser = this.userRepository.create({
+        ...create,
+        address,
+        reviews
+
+      });
+    
       return await this.userRepository.save(newUser);
-  
-     
     }
   
     async findAll() {

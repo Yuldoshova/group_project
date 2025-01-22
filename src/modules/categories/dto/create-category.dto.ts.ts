@@ -19,7 +19,7 @@ export class CreateCategoryDto {
   })
   // @IsNumber()
   // @IsNotEmpty()
-  brend_id?: number;
+  brand_id?: number;
 
   @ApiProperty({
     type: 'number',

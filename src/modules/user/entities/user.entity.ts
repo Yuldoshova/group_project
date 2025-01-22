@@ -1,8 +1,10 @@
+import { Address } from 'modules/address/entities/address.entitiy';
 import { Review } from 'modules/review/model/review.model';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -31,8 +33,11 @@ export class User {
   })
   role: UserRoles;
 
-  @OneToMany(() => Review, (review) => review.user)
+  @OneToMany(() => Review, (review) => review.user,{nullable:true})
   reviews: Array<Review>
+
+  @ManyToOne(() => Address, (address) => address.users, { nullable: true })
+  address: Address;
 
   @CreateDateColumn({
     name: 'created_at',
