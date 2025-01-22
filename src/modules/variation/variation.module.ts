@@ -4,7 +4,7 @@ import { VariationController } from './variation.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Variation } from './entities/variation.entity';
 import { VariationOption } from './entities/variation-option.entity';
-import { Category } from 'modules/categories/entities/category.entities';
+import { Category } from '../categories/entities/category.entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Variation, VariationOption, Category])],

@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRoles } from '@utils';
+import { Review } from 'src/modules/review/model/review.model';
 
 @Entity({ name: 'users' })
 export class User {
@@ -32,8 +34,8 @@ export class User {
   })
   role: UserRoles;
 
-  // @OneToMany(() => Review, (review) => review.user)
-  // reviews: Array<Review>
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Array<Review>
 
   @CreateDateColumn({
     name: 'created_at',

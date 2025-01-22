@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import ExceptionHandlerFilter from 'filter/all-exception.filter';
+import morgan from 'morgan';
+import { ExceptionHandlerFilter } from '@filters';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug'] });

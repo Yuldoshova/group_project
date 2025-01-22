@@ -1,98 +1,50 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Put,
-    Delete,
-    Body,
-    Param,
-    ParseIntPipe,
-    HttpException,
-    HttpStatus,
-    ValidationPipe,
-  } from '@nestjs/common';
-  import { BrandService } from './brand.service';
-  import { CreateBrandDto } from './dto/createBrand.dto';
-import { UpdateBrandDto } from './dto/updateBrand.dto';
-  
-  
-  @Controller('brands')
-  export class BrandController {
-    constructor(private readonly brandService: BrandService) {}
-    @Post()
-    async create(@Body(new ValidationPipe()) createBrandDto: CreateBrandDto) {
-      try {
-        return await this.brandService.create(createBrandDto);
-      } catch (error) {
-        console.error('Brand creation error:', error); // Konsolda xatolik logi
-        throw new HttpException(
-          'Brand creation failed',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    }
-    
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { BrandService } from './brand.service';
+import { CreateBrandDto } from './dto/create-brand.dto';
+import { UpdateBrandDto } from './dto/update-brand.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
-  
-    @Get()
-    async findAll() {
-      try {
-        return await this.brandService.findAll();
-      } catch (error) {
-        throw new HttpException(
-          'Failed to fetch brands',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    }
-  
-    @Get(':id')
-    async findOne(@Param('id', ParseIntPipe) id: number) {
-      try {
-        const brand = await this.brandService.findOne(id);
-        if (!brand) {
-          throw new HttpException('Brand not found', HttpStatus.NOT_FOUND);
-        }
-        return brand;
-      } catch (error) {
-        throw new HttpException(
-          error.message || 'Failed to fetch brand',
-          error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    }
-    
-  
-    @Put(':id')
-    async update(
-      @Param('id', ParseIntPipe) id: number,
-      @Body() updateBrandDto: UpdateBrandDto,
-    ) {
-      try {
-        return await this.brandService.update(id, updateBrandDto);
-      } catch (error) {
-        throw new HttpException(
-          error.message,
-          error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    }
-  
-    @Delete(':id')
-    async remove(@Param('id', ParseIntPipe) id: number) {
-      try {
-        return await this.brandService.remove(id);
-      } catch (error) {
-        throw new HttpException(
-          error.message,
-          error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    }
+@ApiTags("Brand")
+@Controller({ version: "1", path: "brands" })
+export class BrandController {
+  constructor(private readonly brandService: BrandService) { }
+
+  @Post("/add")
+  @UseInterceptors(FileInterceptor("image"))
+  create(
+    @Body() createBrandDto: CreateBrandDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandService.create({ ...createBrandDto, image });
   }
 
-  
+  @Get("/all")
+  findAll() {
+    return this.brandService.findAll();
+  }
 
+  @Get('/single/:id')
+  findOne(
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    return this.brandService.findOne(id);
+  }
 
+  @Patch('/update/:id')
+  @UseInterceptors(FileInterceptor("image"))
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateBrandDto: UpdateBrandDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
+    return this.brandService.update(id, {...updateBrandDto, image});
+  }
 
-
+  @Delete('/remove/:id')
+  remove(
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    return this.brandService.remove(id);
+  }
+}

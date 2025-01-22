@@ -1,6 +1,6 @@
-import { Brand } from 'modules/brand/entities/brand.entity';
-import { Product } from 'modules/product/entities/product.entity';
-import { Variation } from 'modules/variation/entities/variation.entity';
+import { Brand } from 'src/modules/brand/entities';
+import { Product } from 'src/modules/product/entities/product.entity';
+import { Variation } from 'src/modules/variation/entities/variation.entity';
 import {
   Column,
   CreateDateColumn,

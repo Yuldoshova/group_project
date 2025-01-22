@@ -1,7 +1,7 @@
-import { Product } from "modules/product/entities/product.entity";
-import { User } from "modules/user/entities/user.entity";
+import { reviewValue } from "@utils";
+import { Product } from "src/modules/product/entities/product.entity";
+import { User } from "src/modules/user";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { reviewValue } from "utils/review-value.enum";
 
 @Entity('review')
 export class Review {
@@ -18,9 +18,8 @@ export class Review {
     product: Product
 
     @Column({
-        type: "enum",
-        enum: reviewValue,
-        nullable: true
+        nullable: true,
+        enum:reviewValue
     })
     value: reviewValue
 

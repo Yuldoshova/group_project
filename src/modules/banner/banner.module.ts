@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BannerService } from './banner.service';
 import { BannerController } from './banner.controller';
 import { Banner } from './entities/banner.entity';
-import { Type } from 'modules/type/entity/type.entity';
+import { Type } from 'class-transformer';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Banner, Type])],

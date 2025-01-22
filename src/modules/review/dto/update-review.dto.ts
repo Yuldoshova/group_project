@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { reviewValue } from '@utils';
 import { IsOptional, IsInt, IsString } from 'class-validator';
-import { reviewValue } from 'utils/review-value.enum';
 
 export class UpdateReviewDto {
   @ApiProperty({ example: 'Updated comment!', description: 'Updated user comment for the review', required: false })

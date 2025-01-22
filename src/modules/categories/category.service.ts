@@ -1,4 +1,3 @@
-// import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entities';
 import { Repository } from 'typeorm';
@@ -7,7 +6,7 @@ import { CreateCategoryDto } from './dto/create-category.dto.ts';
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common';
-import { UploadService } from 'modules/uploads/upload.service';
+import { UploadService } from '../upload';
 
 @Injectable()
 export class CategoryService {
@@ -17,12 +16,16 @@ export class CategoryService {
     private uploadService: UploadService
   ) { }
 
-  async createCategory(create: CreateCategoryDto, image: Express.Multer.File) {
+  async createCategory(create: CreateCategoryDto, image: Express.Multer.File, icon: Express.Multer.File) {
     const uploadImage = await this.uploadService.uploadFile({
       file: image,
       destination: "uploads/categories/images"
     })
 
+    const uploadIcon = await this.uploadService.uploadFile({
+      file: icon,
+      destination: "uploads/categories/icons"
+    })
 
     const existingCategory = await this.categoryRepository.findOne({
       where: { name: create.name },
@@ -34,7 +37,8 @@ export class CategoryService {
 
     const newCategory = this.categoryRepository.create({
       name: create.name,
-      image: uploadImage.imageUrl
+      image: uploadImage.imageUrl,
+      icon: uploadIcon.imageUrl
     });
 
     await this.categoryRepository.save(newCategory);
@@ -46,7 +50,7 @@ export class CategoryService {
   }
 
   async findAll() {
-    const categories = await this.categoryRepository.find();
+    const categories = await this.categoryRepository.find({ relations: ["categories"] });
     return {
       message: 'Success✅',
       data: categories,
@@ -54,16 +58,14 @@ export class CategoryService {
   }
 
   async findOne(id: number) {
-    const findOne = await this.categoryRepository.findOne({
+    const findCategory = await this.categoryRepository.findOne({
       where: { id },
     });
-    return {
-      message: 'Success✅',
-      data: findOne,
-    };
+
+    return findCategory
   }
 
-  async update(id: number, update: UpdateCategory) {
+  async update(id: number, update: UpdateCategory, image, icon) {
     const existingCategory = await this.categoryRepository.findOne({
       where: { id },
     });
@@ -82,7 +84,17 @@ export class CategoryService {
       }
     }
 
-    await this.categoryRepository.update({ id }, { ...update });
+    const uploadImage = await this.uploadService.uploadFile({
+      file: image,
+      destination: "uploads/categories/images"
+    })
+
+    const uploadIcon = await this.uploadService.uploadFile({
+      file: icon,
+      destination: "uploads/categories/icons"
+    })
+
+    await this.categoryRepository.update({ id }, { image: uploadImage.imageUrl, icon: uploadIcon.imageUrl, name: update.name });
 
     const updatedCategory = await this.categoryRepository.findOne({
       where: { id },

@@ -1,9 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Color } from "./color.entity";
-import { Brand } from "modules/brand/entities/brand.entity";
-import { Category } from "modules/categories/entities/category.entities";
-import { ProductItem } from "./productItem.entity";
-import { Review } from "modules/review/model/review.model";
+import { Brand } from "src/modules/brand/entities";
+import { Category } from "src/modules/categories/entities/category.entities";
+import { ProductItem } from "src/modules/product-item/entities/product-item.entity";
+import { Review } from "src/modules/review/model/review.model";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: "products" })
 export class Product {

@@ -1,6 +1,6 @@
-import { Category } from "modules/categories/entities/category.entities"
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { VariationOption } from "./variation-option.entity"
+import { Category } from "src/modules/categories/entities/category.entities"
 
 @Entity({ name: "variations" })
 export class Variation {

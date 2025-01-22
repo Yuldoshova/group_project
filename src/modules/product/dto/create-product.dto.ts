@@ -4,8 +4,6 @@ export class CreateProductDto {
 
     description?: string
 
-    image: string
-
     categoryId: number
 
     brandId: number

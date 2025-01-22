@@ -3,14 +3,16 @@ import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Color } from './entities/color.entity';
-import { ProductItem } from './entities/productItem.entity';
-import { UploadService } from 'modules/uploads/upload.service';
+import { Brand } from '../brand/entities';
+import { Category } from '../categories/entities/category.entities';
+import { UploadService } from '../upload';
+import { BrandService } from '../brand/brand.service';
+import { CategoryService } from '../categories/category.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, ProductItem, Color])],
+  imports: [TypeOrmModule.forFeature([Product, Brand, Category])],
   controllers: [ProductController],
-  providers: [ProductService, UploadService],
+  providers: [ProductService, UploadService, BrandService, CategoryService],
 })
 export class ProductModule { }
 

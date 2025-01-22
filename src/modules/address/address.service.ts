@@ -11,15 +11,17 @@ export class AddressService{
     async create(addressData: CreateAddressDto):Promise<Address>{
         const newAddress = this.addressRepository.create(addressData)
         return await this.addressRepository.save(newAddress)
-       
     }
+
     async getAll(){
         return await this.addressRepository.find()
     }
+
     async getOne(id: number):Promise<Address>{
         const address =  await this.addressRepository.findOne({where:{id}})
         return address
     }
+
     async update(addressData: UpdateAddressDto,id: number){
         const updatedData = await this.addressRepository.findOne({where:{id}})
         if(!updatedData){
@@ -28,6 +30,7 @@ export class AddressService{
         Object.assign(updatedData,addressData)
         return await this.addressRepository.save(updatedData)
     }
+    
     async delete(id: number){
         return await this.addressRepository.findOne({where:{id}})
     }

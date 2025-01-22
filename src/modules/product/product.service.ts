@@ -4,78 +4,142 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
-import { Color } from './entities/color.entity';
-import { ProductItem } from './entities/productItem.entity';
-import { UploadService } from 'modules/uploads/upload.service';
-import { CreateProductItemDto } from './dto/create-product-item.dto';
+import { UploadService } from '../upload';
+import { BrandService } from '../brand/brand.service';
+import { CategoryService } from '../categories/category.service';
+import { ProductFilterDto } from './dto/product-filter.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
-    @InjectRepository(ProductItem)
-    private productItemRepository: Repository<ProductItem>,
-    @InjectRepository(Color)
-    private colorRepository: Repository<Color>,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private brandService: BrandService,
+    private categoryService: CategoryService,
   ) { }
 
 
-  async createProduct(create: CreateProductDto) {
+  async getAllProducts(
+    page: number = 1,
+    limit: number = 10,
+    filters?: {
+      categoryId?: number;
+      brandId?: number;
+      minPrice?: number;
+      maxPrice?: number;
+      search?: string;
+      sortBy?: 'price' | 'createdAt' | 'rating';
+      sortOrder?: 'ASC' | 'DESC';
+    },
+  ) {
+    const query = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.brand', 'brand')
+      .leftJoinAndSelect('product.category', 'category')
+      .leftJoinAndSelect('product.productItems', 'productItem');
 
-    const newProduct = this.productRepository.create(create);
+    if (filters?.categoryId) {
+      query.andWhere('product.categoryId = :categoryId', {
+        categoryId: filters.categoryId,
+      });
+    }
 
-    await this.productItemRepository.save(newProduct)
+    if (filters?.brandId) {
+      query.andWhere('product.brandId = :brandId', {
+        brandId: filters.brandId,
+      });
+    }
 
+    if (filters?.minPrice || filters?.maxPrice) {
+      if (filters.minPrice) {
+        query.andWhere('productItem.price >= :minPrice', {
+          minPrice: filters.minPrice,
+        });
+      }
+      if (filters.maxPrice) {
+        query.andWhere('productItem.price <= :maxPrice', {
+          maxPrice: filters.maxPrice,
+        });
+      }
+    }
+
+    if (filters?.search) {
+      query.andWhere(
+        '(product.name LIKE :search OR product.description LIKE :search)',
+        { search: `%${filters.search}%` },
+      );
+    }
+
+    if (filters?.sortBy) {
+      const sortOrder = filters.sortOrder || 'ASC';
+      if (filters.sortBy === 'price') {
+        query.orderBy('productItem.price', sortOrder);
+      } else {
+        query.orderBy(`product.${filters.sortBy}`, sortOrder);
+      }
+    }
+
+    const offset = (page - 1) * limit;
+    query.skip(offset).take(limit);
+
+    // Fetch data
+    const [products, total] = await query.getManyAndCount();
 
     return {
-      message: 'Success✅',
-      data: newProduct,
+      items: products,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     };
   }
 
-  async createProductItem(create: CreateProductItemDto, image: Express.Multer.File) {
+  async getSingleProduct(id: number) {
+    return await this.productRepository.findOne({
+      where: { id },
+      relations: ["productItems", "reviews"],
+    });
+  }
+
+  async getMostPopularProducts(limit: number = 10) {
+    const products = await this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.productItems', 'productItem')
+      .leftJoinAndSelect('product.reviews', 'reviews')
+      .orderBy('productItem.price', 'DESC')
+      .take(limit)
+      .getMany();
+    return products;
+  }
+
+  async createProduct(create: CreateProductDto, image: Express.Multer.File) {
 
     const uploadImage = await this.uploadService.uploadFile({
       file: image,
-      destination: "uploads/products"
+      destination: "/uploads/products"
     })
 
-    const newProductItem = this.productItemRepository.create({
-      image: uploadImage.imageUrl,
-      amount: create.amount,
-      price: create.price,
+    const findBrand = await this.brandService.findOne(create.brandId)
+    const findCategory = await this.categoryService.findOne(create.categoryId)
 
+    const newProduct = this.productRepository.create({
+      name: create.name,
+      description: create.description,
+      image: uploadImage.imageUrl,
+      brand: findBrand,
+      category: findCategory
     });
 
-    await this.productItemRepository.save(newProductItem)
+    await this.productRepository.save(newProduct)
 
-
-    return {
-      message: 'Success✅',
-      data: newProductItem,
-    };
-  }
-
-  async createColor(name: string, code: string) {
-    const newColor = this.colorRepository.create({
-      name, code
-    })
-
-    await this.colorRepository.save(newColor)
-
-    return newColor
+    return newProduct
   }
 
   async findAll() {
     const products = await this.productRepository.find();
 
-
-    return {
-      message: 'Success✅',
-      data: products,
-    };
+    return products
   }
 
   async findOne(id: number) {
@@ -83,10 +147,7 @@ export class ProductService {
     if (!findProduct) {
       throw new NotFoundException('Product not found❗');
     }
-    return {
-      message: 'Success✅',
-      data: findProduct,
-    };
+    return findProduct
   }
 
   async update(id: number, update: UpdateProductDto) {

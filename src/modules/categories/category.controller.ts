@@ -7,27 +7,35 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto.ts';
 import { UpdateCategory } from './dto/update-category.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Category')
 @Controller({ version: '1', path: 'categories' })
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
+  @ApiOperation({ summary: 'Create category' })
+  @ApiConsumes('multipart/form-data')
   @Post('add')
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'image', maxCount: 1 },
+      { name: 'icon', maxCount: 1 },
+    ]),
+  )
   create(
     @Body() createCategoryDto: CreateCategoryDto,
-    @UploadedFile() image: Express.Multer.File
-    ) {
-    return this.categoryService.createCategory(createCategoryDto, image);
+    @UploadedFiles()
+    files: { image: Express.Multer.File; icon: Express.Multer.File },
+  ) {
+    return this.categoryService.createCategory(createCategoryDto, files.image[0], files.icon[0]);
   }
 
   @Get('/all')
@@ -41,11 +49,19 @@ export class CategoryController {
   }
 
   @Patch('/update/:id')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'image', maxCount: 1 },
+      { name: 'icon', maxCount: 1 },
+    ]),
+  )
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategory: UpdateCategory,
+    @UploadedFiles()
+    files: { image: Express.Multer.File; icon: Express.Multer.File },
   ) {
-    return this.categoryService.update(id, updateCategory);
+    return this.categoryService.update(id, updateCategory, files.image[0], files.icon[0]);
   }
 
   @Delete('/remove/:id')

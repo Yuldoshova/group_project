@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 // import { User } from '../user/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { OrderItem } from 'modules/order-item/entity/order-item.entity';
+import { OrderItem } from 'src/modules/order-item/entity/order-item.entity';
 
 @Entity()
 export class Order {
