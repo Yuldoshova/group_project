@@ -34,7 +34,6 @@ export class OrderService {
       throw new Error('User not found');
     }
 
-    // Orderni yaratish
     const order = this.orderRepository.create({
       // user: user,
       totalPrice: createOrderDto.totalPrice,
@@ -43,10 +42,8 @@ export class OrderService {
       orderAddressId: createOrderDto.orderAddressId,
     });
 
-    // Orderni saqlash
     await this.orderRepository.save(order);
 
-    // Natijani qaytarish
     return {
       message: 'Success✅',
       data: order,
@@ -97,7 +94,7 @@ export class OrderService {
     const orderItem = this.orderItemRepository.create({
       quantity: createOrderItemDto.quantity,
       price: createOrderItemDto.price,
-      productItem: product, // Ehtimol, bu yerda `productItem`ga to‘g‘ri obyekt kiritish kerak bo‘ladi.
+      productItem: product,
     });
 
     return await this.orderItemRepository.save(orderItem);

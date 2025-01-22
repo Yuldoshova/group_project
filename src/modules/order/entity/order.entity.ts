@@ -22,6 +22,9 @@ export class Order {
   // @JoinColumn({ name: 'user_id' })
   // user: User;
 
+  @Column({ name: 'orderDate', type: 'date', nullable: true })
+  orderDate: Date;
+
   @Column({
     type: 'enum',
     enum: OrderStatus,
@@ -31,9 +34,6 @@ export class Order {
 
   @Column('decimal')
   totalPrice: number;
-
-  @Column({ name: 'orderDate', type: 'date', nullable: true })
-  orderDate: Date;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.orderId)
   orderItems: Array<OrderItem>;
