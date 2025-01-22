@@ -1,73 +1,114 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateProductItemDto } from './dto/create-product-item.dto';
+import { UpdateProductItemDto } from './dto/update-product-item.dto';
 
-@Controller({ version: "1" })
+@ApiTags('Product')
+@Controller({ version: '1', path: 'products' })
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
-  @Post("/products/add")
-  createProduct(
-    @Body() createProductDto: CreateProductDto
-  ) {
+  @Post('/add')
+  @ApiOperation({ summary: 'Create a new product' })
+  @ApiResponse({ status: 201, description: 'The product has been successfully created.' })
+  @ApiResponse({ status: 400, description: 'Invalid input data.' })
+  createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productService.createProduct(createProductDto);
   }
 
-  @Get("/products/all")
+  @Get()
+  @ApiOperation({ summary: 'Retrieve all products' })
+  @ApiResponse({ status: 200, description: 'List of all products retrieved successfully.' })
   findAllProduct() {
     return this.productService.findAll();
   }
 
-  @Get('/products/single/:id')
+  @Get(':id')
+  @ApiOperation({ summary: 'Retrieve a product by ID' })
+  @ApiResponse({ status: 200, description: 'The product has been retrieved successfully.' })
+  @ApiResponse({ status: 404, description: 'Product not found.' })
   findOneProduct(@Param('id', ParseIntPipe) id: number) {
     return this.productService.findOne(id);
   }
 
-  @Patch('/products/update/:id')
+  @Patch('/update/:id')
+  @ApiOperation({ summary: 'Update a product by ID' })
+  @ApiResponse({ status: 200, description: 'The product has been updated successfully.' })
+  @ApiResponse({ status: 404, description: 'Product not found.' })
   updateProduct(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateProductDto: UpdateProductDto
+    @Body() updateProductDto: UpdateProductDto,
   ) {
     return this.productService.update(id, updateProductDto);
   }
 
-  @Delete('/products/delete:id')
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a product by ID' })
+  @ApiResponse({ status: 200, description: 'The product has been deleted successfully.' })
+  @ApiResponse({ status: 404, description: 'Product not found.' })
   removeProduct(@Param('id', ParseIntPipe) id: number) {
     return this.productService.remove(id);
   }
 
-  @Post("/product-items/add")
-   @UseInterceptors(FileInterceptor('image'))
+  @Post('/items/add')
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiOperation({ summary: 'Create a new product item' })
+  @ApiResponse({ status: 201, description: 'The product item has been successfully created.' })
+  @ApiResponse({ status: 400, description: 'Invalid input data.' })
   createProductItem(
     @Body() createProductItemDto: CreateProductItemDto,
-    @UploadedFile() image: Express.Multer.File
+    @UploadedFile() image: Express.Multer.File,
   ) {
     return this.productService.createProductItem(createProductItemDto, image);
   }
 
-  @Get("/product-items/all")
+  @Get('/items')
+  @ApiOperation({ summary: 'Retrieve all product items' })
+  @ApiResponse({ status: 200, description: 'List of all product items retrieved successfully.' })
   findAllProductItem() {
-    return this.productService.findAll();
+    return this.productService.findAllItems();
   }
 
-  @Get('/product-items/single/:id')
+  @Get('/items/:id')
+  @ApiOperation({ summary: 'Retrieve a product item by ID' })
+  @ApiResponse({ status: 200, description: 'The product item has been retrieved successfully.' })
+  @ApiResponse({ status: 404, description: 'Product item not found.' })
   findOneProductItem(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.findOne(id);
+    return this.productService.findOneItem(id);
   }
 
-  @Patch('/product-items/update/:id')
+  @Patch('/items/update/:id')
+  @ApiOperation({ summary: 'Update a product item by ID' })
+  @ApiResponse({ status: 200, description: 'The product item has been updated successfully.' })
+  @ApiResponse({ status: 404, description: 'Product item not found.' })
   updateProductItem(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateProductDto: UpdateProductDto
+    @Body() updateProductItemDto: UpdateProductItemDto,
   ) {
-    return this.productService.update(id, updateProductDto);
+    return this.productService.updateItem(id, updateProductItemDto);
   }
 
-  @Delete('/product-items/delete:id')
+  @Delete('/items/:id')
+  @ApiOperation({ summary: 'Delete a product item by ID' })
+  @ApiResponse({ status: 200, description: 'The product item has been deleted successfully.' })
+  @ApiResponse({ status: 404, description: 'Product item not found.' })
   removeProductItem(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.remove(id);
+    return this.productService.removeItem(id);
   }
 }
+
