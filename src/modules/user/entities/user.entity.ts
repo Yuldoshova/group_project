@@ -1,13 +1,11 @@
-import { Review } from 'modules/review/model/review.model';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserRoles } from 'utils/user-role.enum';
+import { UserRoles } from '@utils';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,7 +18,10 @@ export class User {
   @Column({ name: 'last_name', type: 'varchar', nullable: true })
   lastName: string;
 
-  @Column({ name: 'email', type: 'varchar' })
+  @Column({ name: "image", type: "varchar", nullable: true })
+  image: string
+
+  @Column({ name: 'email', type: 'varchar', nullable: false, unique: true })
   email: string;
 
   @Column({
@@ -31,8 +32,8 @@ export class User {
   })
   role: UserRoles;
 
-  @OneToMany(() => Review, (review) => review.user)
-  reviews: Array<Review>
+  // @OneToMany(() => Review, (review) => review.user)
+  // reviews: Array<Review>
 
   @CreateDateColumn({
     name: 'created_at',

@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsEnum,
@@ -6,26 +6,39 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { UserRoles } from 'utils/user-role.enum';
+import { UserRoles } from '@utils';
 
 export class CreateUserDto {
-  @ApiPropertyOptional({
+  @ApiProperty({
+    type: String,
     example: 'John',
     description: 'First name of the user',
+    required: false
   })
   @IsOptional()
   @IsString()
   firstName?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
+    type: String,
     example: 'Doe',
     description: 'Last name of the user',
+    required: false
   })
   @IsOptional()
   @IsString()
   lastName?: string;
 
   @ApiProperty({
+    type: String,
+    format: 'binary',
+    required: false,
+  })
+  @IsOptional()
+  image?: Express.Multer.File;
+
+  @ApiProperty({
+    type: String,
     example: 'john.doe@example.com',
     description: 'Email address of the user',
     required: true,
@@ -34,11 +47,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   email: string;
 
-  @ApiPropertyOptional({
-    example: UserRoles.ADMIN,
+  @ApiProperty({
+    example: UserRoles.USER,
     description: 'Role of the user',
     enum: UserRoles,
-    enumName: 'UserRoles', 
+    default: UserRoles.USER,
+    required: false
   })
   @IsOptional()
   @IsEnum(UserRoles)
