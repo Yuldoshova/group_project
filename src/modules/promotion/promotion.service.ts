@@ -1,45 +1,77 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Promotion } from './entities/promotion.etity';
 import { CreatePromotionDto } from './dto/createPromotion.dto';
 import { UpdatePromotionDto } from './dto/update.Promotion.dto';
+import { Promotion } from './entities/promotion.etity';
 
 @Injectable()
 export class PromotionService {
+  create(createPromotionDto: CreatePromotionDto) {
+      throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository(Promotion)
     private readonly promotionRepository: Repository<Promotion>,
   ) {}
 
-  async findAll(): Promise<Promotion[]> {
-    return this.promotionRepository.find();
+  async createPromotion(create: CreatePromotionDto) {
+    const newPromotion = this.promotionRepository.create(create);
+    await this.promotionRepository.save(newPromotion);
+
+    return {
+      message: 'Success✅',
+      data: newPromotion,
+    };
   }
 
-  async findOne(id: number): Promise<Promotion> {
+  async findAll() {
+    const promotions = await this.promotionRepository.find();
+
+    return {
+      message: 'Success✅',
+      data: promotions,
+    };
+  }
+
+  async findOne(id: number) {
     const promotion = await this.promotionRepository.findOne({ where: { id } });
     if (!promotion) {
       throw new NotFoundException(`Promotion with ID ${id} not found`);
     }
-    return promotion;
+
+    return {
+      message: 'Success✅',
+      data: promotion,
+    };
   }
 
-  async create(createPromotionDto: CreatePromotionDto): Promise<Promotion> {
-    const promotion = this.promotionRepository.create(createPromotionDto);
-    return this.promotionRepository.save(promotion);
+  async update(id: number, update: UpdatePromotionDto) {
+    const promotion = await this.promotionRepository.findOne({ where: { id } });
+    if (!promotion) {
+      throw new NotFoundException(`Promotion with ID ${id} not found`);
+    }
+
+    await this.promotionRepository.update({ id }, { ...update });
+
+    return {
+      message: 'Success✅',
+      data: id,
+    };
   }
 
-  async update(
-    id: number,
-    updatePromotionDto: UpdatePromotionDto,
-  ): Promise<Promotion> {
-    const promotion = await this.findOne(id);
-    Object.assign(promotion, updatePromotionDto);
-    return this.promotionRepository.save(promotion);
-  }
+  async remove(id: number) {
+    const promotion = await this.promotionRepository.findOne({ where: { id } });
+    if (!promotion) {
+      throw new NotFoundException(`Promotion with ID ${id} not found`);
+    }
 
-  async remove(id: number): Promise<void> {
-    const promotion = await this.findOne(id);
-    await this.promotionRepository.remove(promotion);
+    await this.promotionRepository.delete({ id });
+
+    return {
+      message: 'Success✅',
+      data: id,
+    };
   }
 }
+
