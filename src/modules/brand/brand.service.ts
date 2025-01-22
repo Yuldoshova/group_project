@@ -5,7 +5,7 @@ import { Brand } from './entities/brand.entity';
 import { CreateBrandDto } from './dto/createBrand.dto';
 import { UpdateBrandDto } from './dto/updateBrand.dto';
 
-@Injectable() 
+@Injectable()
 export class BrandService {
   constructor(
     @InjectRepository(Brand)
@@ -14,15 +14,15 @@ export class BrandService {
 
   async create(createBrandDto: CreateBrandDto): Promise<Brand> {
     const brand = this.brandRepository.create(createBrandDto);
-    return this.brandRepository.save(brand);
+    return await this.brandRepository.save(brand);
   }
 
-  findAll(): Promise<Brand[]> {
-    return this.brandRepository.find();
+  async findAll(): Promise<Brand[]> {
+    return await this.brandRepository.find();
   }
 
   async findOne(id: number): Promise<Brand> {
-    const brand = await this.brandRepository.findOneBy({ id });
+    const brand = await this.brandRepository.findOne({ where: { id } });
     if (!brand) {
       throw new NotFoundException(`Brand with ID ${id} not found`);
     }
@@ -32,7 +32,7 @@ export class BrandService {
   async update(id: number, updateBrandDto: UpdateBrandDto): Promise<Brand> {
     const brand = await this.findOne(id);
     Object.assign(brand, updateBrandDto);
-    return this.brandRepository.save(brand);
+    return await this.brandRepository.save(brand);
   }
 
   async remove(id: number): Promise<void> {
@@ -40,6 +40,7 @@ export class BrandService {
     await this.brandRepository.remove(brand);
   }
 }
+
 
 
 
