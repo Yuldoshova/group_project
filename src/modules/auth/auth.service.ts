@@ -24,7 +24,7 @@ import { Repository } from 'typeorm';
 export class AuthService {
   constructor(
     @InjectRepository(User)
-    private userRepository:Repository<User>,
+    private userRepository: Repository<User>,
     private userService: UserService,
     private redisService: RedisService,
     private mailService: MailerService,
@@ -37,8 +37,8 @@ export class AuthService {
 
     const findUser = await this.userService.findByEmail(payload.email)
     if (!findUser) {
-      const newUser = await this.userRepository.create({ email: payload.email })
-
+      const newUser = this.userRepository.create({ email: payload.email })
+      await this.userRepository.save(newUser)
       await this.redisService.setValue({
         key: `otp-${newUser.id}`,
         value: otp,
@@ -54,7 +54,6 @@ export class AuthService {
 
       return newUser
     }
-
     await this.redisService.setValue({
       key: `otp-${findUser.id}`,
       value: otp,

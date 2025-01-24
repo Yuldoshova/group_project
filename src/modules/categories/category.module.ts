@@ -4,11 +4,12 @@ import { CategoryController } from './category.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entities'
 import { UploadService } from '../upload';
-import { Variation } from '../variation/entities/variation.entity';
+import { BrandService } from '../brand/brand.service';
+import { Brand } from '../brand/entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category, Variation])],
+  imports: [TypeOrmModule.forFeature([Category, Brand])],
   controllers: [CategoryController],
-  providers: [CategoryService, UploadService],
+  providers: [CategoryService, UploadService, BrandService],
 })
 export class CategoryModule {}

@@ -7,13 +7,15 @@ import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common';
 import { UploadService } from '../upload';
+import { BrandService } from '../brand/brand.service';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private brandService: BrandService,
   ) { }
 
   async createCategory(create: CreateCategoryDto, image: Express.Multer.File, icon: Express.Multer.File) {
@@ -35,10 +37,16 @@ export class CategoryService {
       throw new ConflictException('Category with this name already exists❗');
     }
 
+
+    const findBrand = await this.brandService.findOne(create.brend_id)
+    const findCategory = await this.categoryRepository.findOne({ where: { id: create.parent_id } })
+
     const newCategory = this.categoryRepository.create({
       name: create.name,
       image: uploadImage.imageUrl,
-      icon: uploadIcon.imageUrl
+      icon: uploadIcon.imageUrl,
+      brand: findBrand,
+      parent: findCategory
     });
 
     await this.categoryRepository.save(newCategory);

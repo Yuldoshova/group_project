@@ -14,11 +14,11 @@ export class CreateCategoryDto {
 
   @ApiProperty({
     type: 'number',
-    required: true,
+    required: false,
     example: 1,
   })
-  // @IsNumber()
-  // @IsNotEmpty()
+  @IsNumber()
+  @IsOptional()
   brend_id?: number;
 
   @ApiProperty({
