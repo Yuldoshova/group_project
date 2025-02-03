@@ -1,40 +1,40 @@
-import { IsString, IsInt } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateBannerDto {
   @ApiProperty({
-    description: 'Banner rasmi URL manzili',
-    example: 'https://example.com/banner.jpg',
-  })
-  @IsString()
-  image: string;
-
-  @ApiProperty({
-    description: 'Banner nomi',
-    example: 'Product Banner',
+    description: 'Banner sarlavhasi',
+    example: 'Yangi aksiya',
+    required: true,
   })
   @IsString()
   title: string;
 
   @ApiProperty({
-    description: 'Banner haqida qisqacha tavsif',
-    example: 'This is a special banner for our product.',
+    description: 'Banner tavsifi',
+    example: 'Aksiya haqida batafsil malumot',
+    required: false,
   })
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @ApiProperty({
-    description: 'Banner turi (product yoki category)',
+    description: 'Banner turi ID si',
     example: 1,
-  })
-  @IsInt()
-  type_id: number;
-
-  @ApiProperty({
-    description: 'Brand nomi',
-    example: 'Product Brand',
     required: true,
   })
-  @IsString()
-  name: string;
+  @IsNumber()
+  @Transform(({ value }) => Number(value))
+  typeId: number;
+
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'Banner rasmi',
+    required: false,
+  })
+  @IsOptional()
+  image?: any;
 }

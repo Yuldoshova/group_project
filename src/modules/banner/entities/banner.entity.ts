@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { BannerType } from './type.status';
 
-@Entity()
+@Entity('banner')
 export class Banner {
   @PrimaryGeneratedColumn()
-   id: number;
+  id: number;
 
   @Column()
   title: string;
@@ -11,8 +12,11 @@ export class Banner {
   @Column({ nullable: true })
   description: string;
 
-  @Column()
-  type_id: number;
+  @ManyToOne(() => BannerType, { eager: true })
+  type: BannerType;
+
+  @Column({ type: 'enum', enum: BannerType })
+  type_id: BannerType;
 
   @Column({ nullable: true })
   image: string;

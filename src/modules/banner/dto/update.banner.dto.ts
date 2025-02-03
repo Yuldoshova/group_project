@@ -36,5 +36,5 @@ export class UpdateBannerDto {
   })
   @IsOptional()
   @IsInt()
-  type_id?: number;
+  typeId?: number;
 }

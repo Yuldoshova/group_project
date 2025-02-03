@@ -1,81 +1,58 @@
-/* eslint-disable prettier/prettier */
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Param,
-  Put,
-  Delete,
-  UploadedFile,
   UseInterceptors,
+  UploadedFile,
+  Get,
+  Param,
+  Patch,
+  Delete,
+  NotFoundException,
 } from '@nestjs/common';
-import { BannerService } from './banner.service';
-// import { CreateBannerDto } from './dto/create-banner.dto';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody,
-  ApiConsumes,
-} from '@nestjs/swagger';
-import { UpdateBannerDto } from './dto/update.banner.dto';
-import { Banner } from './entities/banner.entity';
-import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { BannerService } from './banner.service';
 import { CreateBannerDto } from './dto/create-banner.dto';
+import { Banner } from './entities/banner.entity';
+import { UpdateBannerDto } from './dto/update.banner.dto';
 
 @ApiTags('banners')
 @Controller('banners')
 export class BannerController {
   constructor(private readonly bannerService: BannerService) {}
 
-  @Post()
-   @ApiOperation({ summary: 'Banner yaratish va rasm yuklash' })
-
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: "Banner va rasm ma'lumotlari",
-    type: CreateBannerDto,
-  })
+  @Post('create')
+  @UseInterceptors(FileInterceptor('image'))
   async create(
     @Body() createBannerDto: CreateBannerDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() image: Express.Multer.File,
   ): Promise<Banner> {
-    const imagePath = file ? file.filename : null;
-    return this.bannerService.create(createBannerDto, imagePath);
-  }
+    if (!image) {
+      throw new NotFoundException('Image file is required');
+    }
 
+    return this.bannerService.create({ ...createBannerDto, image });
+  }
   @Get()
-  @ApiOperation({ summary: 'Barcha bannerlarni olish' })
-  @ApiResponse({
-    status: 200,
-    description: "Barcha bannerlar ro'yxati",
-    type: [Banner],
-  })
+  @ApiOperation({ summary: 'Banners roʻyxatini olish' })
   async findAll(): Promise<Banner[]> {
     return this.bannerService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: "Bannerni id bo'yicha olish" })
-  @ApiResponse({
-    status: 200,
-    description: "Banner ma'lumotlari",
-    type: Banner,
-  })
+  @ApiOperation({ summary: 'Bannerni ID bo‘yicha olish' })
   async findOne(@Param('id') id: number): Promise<Banner> {
     return this.bannerService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOperation({ summary: 'Bannerni yangilash' })
-  @ApiResponse({
-    status: 200,
-    description: 'Banner muvaffaqiyatli yangilandi.',
-    type: Banner,
+  @ApiBody({
+    type: UpdateBannerDto,
   })
-  update(
+  async update(
     @Param('id') id: number,
     @Body() updateBannerDto: UpdateBannerDto,
   ): Promise<Banner> {
@@ -83,12 +60,8 @@ export class BannerController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: "Bannerni o'chirish" })
-  @ApiResponse({
-    status: 204,
-    description: "Banner muvaffaqiyatli o'chirildi.",
-  })
-  remove(@Param('id') id: number): Promise<void> {
+  @ApiOperation({ summary: 'Bannerni oʻchirish' })
+  async remove(@Param('id') id: number): Promise<void> {
     return this.bannerService.remove(id);
   }
 }
