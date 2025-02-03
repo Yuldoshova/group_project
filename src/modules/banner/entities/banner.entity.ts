@@ -16,7 +16,7 @@ export class Banner {
   type: BannerType;
 
   @Column({ type: 'enum', enum: BannerType })
-  type_id: BannerType;
+  typeId: BannerType;
 
   @Column({ nullable: true })
   image: string;
