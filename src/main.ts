@@ -2,12 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import morgan from 'morgan';
 import { ExceptionHandlerFilter } from 'src/filters';
 import { AppModule } from './app.module';
+import * as express from 'express';
+import serverlessExpress from '@vendia/serverless-express';
+import { ExpressAdapter } from '@nestjs/platform-express';
+
+const expressApp = express();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug'] });
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
+  await app.init();
 
   app.enableVersioning({
     type: VersioningType.URI,
@@ -35,6 +40,6 @@ async function bootstrap() {
       console.log(`Server running port on ${appConfig.get<number>('appConfig.port')}`)
     });
 }
-bootstrap();
-
-
+bootstrap().then(() => {
+  exports.handler = serverlessExpress({ app: expressApp });
+});
