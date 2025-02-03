@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { UserRoles } from '@utils';
+import { UserRoles } from 'src/utils';
 
 export class CreateUserDto {
   @ApiProperty({

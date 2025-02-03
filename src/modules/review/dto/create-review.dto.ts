@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { reviewValue } from '@utils';
+import { reviewValue } from 'src/utils';
 import {
     IsEmail,
     IsEnum,

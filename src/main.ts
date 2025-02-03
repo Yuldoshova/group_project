@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import morgan from 'morgan';
-import { ExceptionHandlerFilter } from '@filters';
+import { ExceptionHandlerFilter } from 'src/filters';
 import { AppModule } from './app.module';
 
 async function bootstrap() {

@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserRoles } from '@utils';
+import { UserRoles } from 'src/utils';
 import { Review } from 'src/modules/review/model/review.model';
 
 @Entity({ name: 'users' })

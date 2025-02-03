@@ -19,28 +19,28 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@redis": [
-        "./src/client"
+        "src/client"
       ],
       "@config": [
-        "./src/config"
+        "src/config"
       ],
       "@decorators": [
-        "./src/decorators"
+        "src/decorators"
       ],
       "@filters": [
-        "./src/filters"
+        "src/filters"
       ],
       "@guards": [
         "src/guards"
       ],
       "@modules": [
-        "./src/modules"
+        "src/modules"
       ],
       "@seeds": [
-        "./src/seeds"
+        "src/seeds"
       ],
       "@utils": [
-        "./src/utils"
+        "src/utils"
       ]
     }
   }

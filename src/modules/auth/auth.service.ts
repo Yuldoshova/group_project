@@ -14,7 +14,7 @@ import {
 } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
-import { RedisService } from '@redis';
+import { RedisService } from 'src/client';
 import { User, UserService } from '../user';
 import { CheckOtpDto, LoginDto, RefreshDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';

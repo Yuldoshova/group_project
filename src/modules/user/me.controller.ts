@@ -1,8 +1,8 @@
 import { Controller, Get, Request } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Protected, Roles } from '@decorators';
-import { RequestInterface } from '@guards';
-import { UserRoles } from '@utils';
+import { Protected, Roles } from 'src/decorators';
+import { RequestInterface } from 'src/guards';
+import { UserRoles } from 'src/utils';
 import { MeService } from './me.service';
 import { User } from './entities';
 

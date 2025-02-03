@@ -1,13 +1,13 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from './entities/category.entities';
+import { Category } from './entities/category.entities.js';
 import { Repository } from 'typeorm';
 import { UpdateCategory } from './dto/update-category.dto.js';
-import { CreateCategoryDto } from './dto/create-category.dto.ts';
+import { CreateCategoryDto } from './dto/create-category.dto.ts.js';
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common';
-import { UploadService } from '../upload';
-import { BrandService } from '../brand/brand.service';
+import { UploadService } from '../upload/index.js';
+import { BrandService } from '../brand/brand.service.js';
 
 @Injectable()
 export class CategoryService {

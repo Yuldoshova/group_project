@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Protected, Roles } from '@decorators';
-import { UserRoles } from '@utils';
+import { Protected, Roles } from 'src/decorators';
+import { UserRoles } from 'src/utils';
 import { UploadService } from './upload.service';
 import { RemoveFileDto, UploadFileDto } from './dto';
 

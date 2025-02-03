@@ -1,4 +1,4 @@
-import { reviewValue } from "@utils";
+import { reviewValue } from "src/utils";
 import { Product } from "src/modules/product/entities/product.entity";
 import { User } from "src/modules/user";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";

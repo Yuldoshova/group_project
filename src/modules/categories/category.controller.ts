@@ -11,9 +11,9 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/create-category.dto.ts';
-import { UpdateCategory } from './dto/update-category.dto';
+import { CategoryService } from './category.service.js';
+import { CreateCategoryDto } from './dto/create-category.dto.ts.js';
+import { UpdateCategory } from './dto/update-category.dto.js';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Category')

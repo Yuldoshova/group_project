@@ -9,10 +9,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { Protected } from '@decorators';
+import { Protected } from 'src/decorators';
 import { JsonWebTokenError, JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UserRoles } from '@utils';
+import { UserRoles } from 'src/utils';
 
 export declare interface RequestInterface extends Request {
   userId: number | undefined;

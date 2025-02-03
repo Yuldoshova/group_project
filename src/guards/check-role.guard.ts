@@ -7,8 +7,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { RequestInterface } from './check-auth.guard';
-import { Roles } from '@decorators';
-import { UserRoles } from '@utils';
+import { Roles } from 'src/decorators';
+import { UserRoles } from 'src/utils';
 
 @Injectable()
 export class CheckRoleGuard implements CanActivate {
