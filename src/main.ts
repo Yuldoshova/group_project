@@ -5,7 +5,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExceptionHandlerFilter } from 'src/filters';
 import { AppModule } from './app.module';
 import * as express from 'express';
-import serverlessExpress from '@vendia/serverless-express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 
 
