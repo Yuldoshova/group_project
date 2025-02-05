@@ -8,11 +8,9 @@ import * as express from 'express';
 import serverlessExpress from '@vendia/serverless-express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 
-const expressApp = express();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
-  await app.init();
+  const app = await NestFactory.create(AppModule);
 
   app.enableVersioning({
     type: VersioningType.URI,
@@ -40,6 +38,4 @@ async function bootstrap() {
       console.log(`Server running port on ${appConfig.get<number>('appConfig.port')}`)
     });
 }
-bootstrap().then(() => {
-  exports.handler = serverlessExpress({ app: expressApp });
-});
+bootstrap()
