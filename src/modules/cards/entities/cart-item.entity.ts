@@ -8,12 +8,12 @@ export class CartItem{
     id: number
 
 
-    @ManyToOne(()=> Card,(cart)=> cart.cartItem)
+    @ManyToOne(()=> Card,(cart)=> cart.cartItem,{cascade: true})
     @JoinColumn({name: 'cart_id'})
     cart_id: Card
 
 
-    @ManyToOne(()=> ProductItem,(productItem)=> productItem.cartItem)
+    @ManyToOne(()=> ProductItem,(productItem)=> productItem.cartItem,{cascade: true})
     @JoinColumn({name: 'product_item_id'})
     product_item_id: Array<ProductItem>
 

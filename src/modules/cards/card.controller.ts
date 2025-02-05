@@ -12,6 +12,8 @@ import {
   import { CardService } from './card.service';
   import { CreateCardDto } from './dto/card-create.dto';
   import { UpdateCardDto } from './dto/update-card.dto';
+import { CreateCartItemDto } from './dto/cartItem-create.dto';
+import { UpdateCartItemDto } from './dto/cartItem-update.dto';
   
   @ApiTags('Card')
   @Controller({ version: '1', path: 'cards' })
@@ -39,17 +41,7 @@ import {
       return this.cardService.getOne(id);
     }
   
-    @Post('/add')
-    @ApiOperation({ summary: 'Create a new card' })
-    @ApiResponse({
-      status: 201,
-      description: 'The card has been successfully created.',
-    })
-    @ApiResponse({ status: 400, description: 'Invalid input data.' })
-    create(@Body() createCardDto: CreateCardDto) {
-      return this.cardService.create(createCardDto);
-    }
-  
+    
     @Patch('/update/:id')
     @ApiOperation({ summary: 'Update a card by ID' })
     @ApiResponse({
@@ -73,6 +65,28 @@ import {
     @ApiResponse({ status: 404, description: 'Card not found.' })
     remove(@Param('id', ParseIntPipe) id: number) {
       return this.cardService.delete(id);
+    }
+
+    // Cart Item crud
+
+    @Post('item')
+    createCartItem(@Body()data: CreateCartItemDto){
+      return this.cardService.createCartItem(data)
+    }
+
+    @Get('item')
+    getAllCartItem(){
+      return this.cardService.getAllCartItem()
+    }
+
+    @Patch('item/update/:id')
+    updateCartItem(@Param('id',ParseIntPipe)id: number,update: UpdateCartItemDto){
+      return this.updateCartItem(id,update)
+    }
+
+    @Delete('delete/:id')
+    deleteCartItem(@Param('id',ParseIntPipe)id: number){
+      return this.deleteCartItem(id)
     }
   }
   

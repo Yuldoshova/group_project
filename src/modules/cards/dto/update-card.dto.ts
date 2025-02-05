@@ -9,7 +9,7 @@ export class UpdateCardDto{
     })
     @IsInt()
     @IsOptional()
-    user_id: User
+    user_id: number
 }
 
 

@@ -19,6 +19,8 @@ import { User, UserService } from '../user';
 import { CheckOtpDto, LoginDto, RefreshDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Card } from '../cards/entities/card.entity';
+import { CreateCardDto } from '../cards/dto/card-create.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +32,8 @@ export class AuthService {
     private mailService: MailerService,
     private config: ConfigService,
     private jwt: JwtService,
+    @InjectRepository(Card)
+    private cardRepository: Repository<Card>
   ) { }
 
   async login(payload: LoginDto) {
@@ -51,7 +55,6 @@ export class AuthService {
         subject: `Verification code for movie app`,
         html: `<h2>Sizning verifikatsiya kodingiz:<h1>${otp}</h1></h2>`,
       });
-
       return newUser
     }
     await this.redisService.setValue({
@@ -103,6 +106,11 @@ export class AuthService {
         secret: this.config.get<string>('jwt.refreshKey'),
       },
     );
+console.log("ISHLADIIIIIIIIIIIIIIIIIIIIIIIIIII")
+    const newCard = this.cardRepository.create({ user: findUser });
+    await this.cardRepository.save(newCard);
+
+    console.log("Card:", newCard)
 
     return {
       message: 'Success✅',

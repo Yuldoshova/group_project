@@ -6,9 +6,10 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserService } from '../user';
 import { UploadService } from '../upload';
+import { Card } from '../cards/entities/card.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User,Card])],
   controllers: [AuthController],
   providers: [AuthService, UserService, RedisService, UploadService],
 })

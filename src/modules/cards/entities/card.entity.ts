@@ -8,11 +8,8 @@ export class Card{
     id: number
 
     @ManyToOne(()=> User,(user)=> user.id)
-    @JoinColumn({name:'user_id'})
-    user_id: User
+    user: User
 
-    @OneToMany(()=> CartItem,(cartItem)=> cartItem.cart_id)
+    @OneToMany(()=> CartItem,(cartItem)=> cartItem.cart_id,{onDelete: 'CASCADE'})
     cartItem: Array<CartItem>
-
-
 }

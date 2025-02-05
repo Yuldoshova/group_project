@@ -23,7 +23,7 @@ export class ProductItem {
     @ManyToOne(() => Color, (color) => color.productItems)
     color: Color
 
-    @OneToMany(()=> CartItem,(cartItem)=> cartItem.product_item_id)
+    @OneToMany(()=> CartItem,(cartItem)=> cartItem.product_item_id,{onDelete: 'CASCADE'})
     cartItem: CartItem
 
 }

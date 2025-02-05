@@ -39,7 +39,7 @@ export class User {
   reviews: Array<Review>
 
 
-  @OneToMany(()=>Card,(card)=> card.user_id)
+  @OneToMany(()=>Card,(card)=> card.user)
   cards: Array<Card>
 
   @CreateDateColumn({

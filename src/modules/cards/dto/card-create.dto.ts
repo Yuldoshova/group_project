@@ -10,5 +10,5 @@ export class CreateCardDto {
   })
   @IsInt()
   @IsNotEmpty()
-  user_id: User;
+  user_id: number;
 }
