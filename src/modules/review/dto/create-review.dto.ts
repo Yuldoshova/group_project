@@ -33,6 +33,7 @@ import {
       description: 'Review value as an enum',
       enum: reviewValue,
       required: false,
+      default: reviewValue.AVERAGE
     })
     @IsOptional()
     @IsEnum(reviewValue)

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty } from 'class-validator';
+import { User } from 'src/modules/user';
 
 export class CreateCardDto {
   @ApiProperty({
@@ -9,5 +10,5 @@ export class CreateCardDto {
   })
   @IsInt()
   @IsNotEmpty()
-  user_id: number;
+  user_id: User;
 }

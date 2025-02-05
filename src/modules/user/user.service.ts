@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities';
 import { UploadService } from '../upload';
 import { CreateUserDto, UpdateUserDto } from './dto';
+import { UserRoles } from '@utils';
 
 @Injectable()
 export class UserService {
@@ -36,7 +37,7 @@ export class UserService {
       lastName: create.lastName,
       email: create.email,
       image: uploadImage.imageUrl,
-      role: create.role
+      role: create.role 
     });
 
     return await this.userRepository.save(newUser);

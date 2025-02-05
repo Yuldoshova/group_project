@@ -34,9 +34,10 @@ export class BannerService {
     });
 
     const banner = this.bannerRepository.create({
-      ...createBannerDto,
+      description: createBannerDto.description,
+      title: createBannerDto.title,
       image: uploadImage.imageUrl,
-      typeId: bannerType,
+      type: bannerType,
     });
 
     return await this.bannerRepository.save(banner);

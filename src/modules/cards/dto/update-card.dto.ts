@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsInt, IsOptional } from "class-validator";
+import { User } from "src/modules/user";
 
 export class UpdateCardDto{
     @ApiPropertyOptional({
@@ -8,7 +9,7 @@ export class UpdateCardDto{
     })
     @IsInt()
     @IsOptional()
-    user_id: number
+    user_id: User
 }
 
 

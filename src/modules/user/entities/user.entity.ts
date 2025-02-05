@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { UserRoles } from 'src/utils';
 import { Review } from 'src/modules/review/model/review.model';
+import { Card } from 'src/modules/cards/entities/card.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -36,6 +37,10 @@ export class User {
 
   @OneToMany(() => Review, (review) => review.user)
   reviews: Array<Review>
+
+
+  @OneToMany(()=>Card,(card)=> card.user_id)
+  cards: Array<Card>
 
   @CreateDateColumn({
     name: 'created_at',

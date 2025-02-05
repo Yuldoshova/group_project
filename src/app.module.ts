@@ -34,6 +34,7 @@ import { ProductItemModule } from './modules/product-item/product-item.module';
 import { VariationModule } from './modules/variation/variation.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
+import { CartItem } from './modules/cards/entities/cart-item.entity';
 
 @Module({
   imports: [
@@ -59,9 +60,14 @@ import { PromotionModule } from './modules/promotion/promotion.module';
         username: configService.get<string>('dbConfig.user'),
         password: configService.get<string>('dbConfig.password'),
         database: configService.get<string>('dbConfig.dbName'),
-        entities: [User, Category, Color, Brand, Address, Banner, Card, Order, OrderItem, Product, ProductItem, Variation, VariationOption, Review, District],
+        entities: [User, Category, Color, Brand, Address, Banner, Card,CartItem, Order, OrderItem, Product, ProductItem, Variation, VariationOption, Review, District],
+
         autoLoadEntities: true,
         synchronize: true,
+        // synchronize: false,
+        // migrations: ['dist/migrations/*.js'],
+        // migrationsRun: true,
+
         // logging: true
       }),
       inject: [ConfigService]

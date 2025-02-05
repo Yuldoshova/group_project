@@ -1,6 +1,7 @@
+import { CartItem } from "src/modules/cards/entities/cart-item.entity";
 import { Color } from "src/modules/color";
 import { Product } from "src/modules/product/entities/product.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "product_items" })
 export class ProductItem {
@@ -21,5 +22,8 @@ export class ProductItem {
 
     @ManyToOne(() => Color, (color) => color.productItems)
     color: Color
+
+    @OneToMany(()=> CartItem,(cartItem)=> cartItem.product_item_id)
+    cartItem: CartItem
 
 }

@@ -19,8 +19,10 @@ export class Review {
 
     @Column({
         nullable: true,
-        enum:reviewValue
-    })
-    value: reviewValue
+        type: 'enum',
+        enum: reviewValue,
+      })
+      value: reviewValue;
+      
 
 }
